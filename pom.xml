@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.rify</groupId>
+    <artifactId>rapidify-spring</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>rapidify-spring</name>
+    <description>fast and efficient springboot development scaffolding</description>
+    <modules>
+        <module>common</module>
+        <module>core</module>
+        <module>jobs</module>
+        <module>generator</module>
+        <module>server</module>
+        <module>application</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>21</java.version>
+        <rify.version>1.0.0</rify.version>
+        <redis.version>3.0.4</redis.version>
+        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
+        <druid.version>1.2.19</druid.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <knife4j.version>4.3.0</knife4j.version>
+        <jackson.version>2.15.2</jackson.version>
+        <jwt.version>0.11.5</jwt.version>
+        <user-agent.version>1.21</user-agent.version>
+    </properties>
+
+    <dependencyManagement>
+        <!-- 导入 springboot 依赖 -->
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>3.1.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-redis</artifactId>
+                <version>${redis.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!-- jwt 令牌 -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>eu.bitwalker</groupId>
+                <artifactId>UserAgentUtils</artifactId>
+                <version>${user-agent.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.rify</groupId>
+                <artifactId>common</artifactId>
+                <version>${rify.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.rify</groupId>
+                <artifactId>core</artifactId>
+                <version>${rify.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.rify</groupId>
+                <artifactId>jobs</artifactId>
+                <version>${rify.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.rify</groupId>
+                <artifactId>generator</artifactId>
+                <version>${rify.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.rify</groupId>
+                <artifactId>server</artifactId>
+                <version>${rify.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.rify</groupId>
+                <artifactId>application</artifactId>
+                <version>${rify.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
