@@ -11,10 +11,10 @@ import java.util.Arrays;
  * @author : lucas
  * @version 1.0
  * @date : 2023/9/29上午11:29
- * @className : IpAddrUtils
+ * @className : IpAddrUtil
  * @description : ip 地址工具类
  */
-public class IpAddrUtils {
+public class IpAddrUtil {
     private static final String[] HEADERS_TO_TRY = {
             "X-Forwarded-For",
             "Proxy-Client-IP",

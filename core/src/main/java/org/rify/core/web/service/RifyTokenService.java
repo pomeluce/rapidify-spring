@@ -1,21 +1,28 @@
 package org.rify.core.web.service;
 
 import eu.bitwalker.useragentutils.UserAgent;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
-import org.rify.common.config.RifyConfig;
+import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
+import org.rify.common.config.RifyProperty;
 import org.rify.common.core.domain.model.LoginUser;
 import org.rify.common.core.redis.RedisClient;
 import org.rify.common.enums.CacheKey;
-import org.rify.common.utils.GenIdUtils;
-import org.rify.common.utils.IpAddrUtils;
-import org.rify.common.utils.LocationUtils;
-import org.rify.common.utils.ServletUtils;
+import org.rify.common.utils.GenIdUtil;
+import org.rify.common.utils.IpAddrUtil;
+import org.rify.common.utils.LocationUtil;
+import org.rify.common.utils.ServletUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -30,9 +37,15 @@ import java.util.Map;
  */
 @Service
 public class RifyTokenService {
-    private @Resource RifyConfig rifyConfig;
+    private final Logger log = LoggerFactory.getLogger(RifyTokenService.class);
+    private @Resource RifyProperty property;
     private @Resource RedisClient redisClient;
+    private RifyProperty.Token tokenProp;
     private final long MILLIS = 1000L;
+
+    private @PostConstruct void init() {
+        tokenProp = property.getToken();
+    }
 
     /**
      * 创建 token 令牌
@@ -44,15 +57,15 @@ public class RifyTokenService {
         long currentTimeMillis = System.currentTimeMillis();
         return Jwts.builder()
                 // 设置唯一编号
-                .setId(GenIdUtils.timestamp().toString())
+                .setId(GenIdUtil.timestamp().toString())
                 // 设置主题
                 .setSubject("rify-create-token")
                 // 签发日期
                 .setIssuedAt(new Date(currentTimeMillis))
                 // 设置签发者
-                .setIssuer(rifyConfig.getIssuer())
+                .setIssuer(tokenProp.getIssuer())
                 // 设置过期时间
-                .setExpiration(new Date(currentTimeMillis + rifyConfig.getExpireTime() * MILLIS))
+                .setExpiration(new Date(currentTimeMillis + tokenProp.getExpireTime() * MILLIS))
                 // 自定义属性
                 .addClaims(claims)
                 // 设置签名使用的签名算法和签名使用的秘钥
@@ -66,23 +79,112 @@ public class RifyTokenService {
      * @return 返回一个 string 类型的 token 令牌
      */
     public String accessToken(LoginUser user) {
-        // 获取 token 唯一标识
-        String uid = GenIdUtils.randomUUID();
+        long currentTime = System.currentTimeMillis();
+        String uid = GenIdUtil.randomUUID();
         user.setUid(uid);
-        // 设置用户代理信息
         setUserAgent(user);
+        user.setExpireTime(currentTime + tokenProp.getExpireTime() * MILLIS);
+        user.setRefreshTime(currentTime + tokenProp.getRefreshExpireTime() * MILLIS);
 
         Map<String, Object> claims = new HashMap<>();
-        // 设置 claims 信息
-        claims.put(CacheKey.ACCESS_TOKEN_KEY.value(), uid);
-        // 获取 token 令牌
+        claims.put(CacheKey.TOKEN_ACCESS_KEY.value(), uid);
         String token = createToken(claims);
-        // 设置过期时间
-        setExpiredTime(token, System.currentTimeMillis() + rifyConfig.getExpireTime() * MILLIS);
-        // 设置刷新时间
-        setRefreshTime(token, System.currentTimeMillis() + rifyConfig.getRefreshExpireTime() * MILLIS);
-        // 返回 token 信息
+        redisClient.hset(CacheKey.TOKEN_LOGIN_USER_KEY.value(), token, user);
+        setExpiredTime(token, currentTime + tokenProp.getExpireTime() * MILLIS);
+        setRefreshTime(token, currentTime + tokenProp.getRefreshExpireTime() * MILLIS);
         return token;
+    }
+
+    /**
+     * 刷新 token 令牌
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 string 类型的 token 令牌
+     */
+    public String refreshToken(String token) {
+        long currentTime = System.currentTimeMillis();
+        LoginUser user = getLoginUser(token);
+        user.setExpireTime(currentTime + tokenProp.getExpireTime() * MILLIS);
+        user.setRefreshTime(currentTime + tokenProp.getRefreshExpireTime() * MILLIS);
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(CacheKey.TOKEN_ACCESS_KEY.value(), user.getUid());
+        token = createToken(claims);
+        redisClient.hset(CacheKey.TOKEN_LOGIN_USER_KEY.value(), token, user);
+        setExpiredTime(token, currentTime + tokenProp.getExpireTime() * MILLIS);
+        setRefreshTime(token, currentTime + tokenProp.getRefreshExpireTime() * MILLIS);
+        return token;
+    }
+
+    /**
+     * 根据 request 对象获取 token
+     *
+     * @param request HttpServletRequest 对象 {@link HttpServletRequest}
+     * @return 返回一个 String 类型的 token
+     */
+    public String getToken(HttpServletRequest request) {
+        String token = request.getHeader(tokenProp.getHeaderKey());
+        return StringUtils.isNotBlank(token) && StringUtils.startsWithIgnoreCase(token, CacheKey.TOKEN_PREFIX_KEY.value())
+                ? token.substring(CacheKey.TOKEN_PREFIX_KEY.value().length())
+                : token;
+    }
+
+    /**
+     * 根据 token 获取 loginUser
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 LoginUser 类型的用户登录对象
+     */
+    public LoginUser getLoginUser(String token) {
+        return (LoginUser) redisClient.hget(CacheKey.TOKEN_LOGIN_USER_KEY.value(), token);
+    }
+
+    /**
+     * 判断 token 是否合法
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 boolean 类型的判断结果
+     */
+    public boolean checkToken(String token) {
+        try {
+            getJws(token);
+        } catch (ExpiredJwtException e) {
+            log.error("token information is expired: [{}]", e.getMessage());
+        } catch (UnsupportedJwtException | SignatureException | MalformedJwtException |
+                 IllegalArgumentException e) {
+            log.error("token information parsing failed, failed info: [{}]", e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 判断 token 是否在黑名单中
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 boolean 类型的判断结果
+     */
+    public boolean isBlackList(String token) {
+        return redisClient.hexists(CacheKey.TOKEN_BLACK_KEY.value(), token);
+    }
+
+    /**
+     * 判断 token 是否在黑名单外
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 boolean 类型的判断结果
+     */
+    public boolean isNotBlackList(String token) {
+        return !isBlackList(token);
+    }
+
+    /**
+     * 添加 token 到黑名单中
+     *
+     * @param token token 信息 {@link String}
+     */
+    public void putBlackList(String token) {
+        redisClient.hset(CacheKey.TOKEN_BLACK_KEY.value(), token, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 
     /**
@@ -92,7 +194,17 @@ public class RifyTokenService {
      * @param expiredTime 过期时间 {@link  Long}
      */
     public void setExpiredTime(String token, Long expiredTime) {
-        redisClient.hset(token, "expiredTime", expiredTime);
+        redisClient.hset(CacheKey.TOKEN_EXPIRED_TIME_KEY.value(), token, expiredTime);
+    }
+
+    /**
+     * 根据 token 获取过期时间
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 Long 类型的过期时间
+     */
+    public long getExpiredTime(String token) {
+        return (Long) redisClient.hget(CacheKey.TOKEN_EXPIRED_TIME_KEY.value(), token);
     }
 
     /**
@@ -102,7 +214,37 @@ public class RifyTokenService {
      * @param refreshTime 刷新时间 {@link  Long}
      */
     public void setRefreshTime(String token, Long refreshTime) {
-        redisClient.hset(token, "refreshTime", refreshTime);
+        redisClient.hset(CacheKey.TOKEN_REFRESH_TIME_KEY.value(), token, refreshTime);
+    }
+
+    /**
+     * 根据 token 获取刷新时间
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 Long 类型的刷新时间
+     */
+    public long getRefreshTime(String token) {
+        return (Long) redisClient.hget(CacheKey.TOKEN_REFRESH_TIME_KEY.value(), token);
+    }
+
+    /**
+     * 判断 token 是否过期
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 boolean 类型的判断结果
+     */
+    public boolean isExpired(String token) {
+        return System.currentTimeMillis() > getExpiredTime(token);
+    }
+
+    /**
+     * 判断 token 是否可以刷新
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 boolean 类型的判断结果
+     */
+    public boolean isRefresh(String token) {
+        return System.currentTimeMillis() <= getRefreshTime(token);
     }
 
     /**
@@ -111,12 +253,20 @@ public class RifyTokenService {
      * @param user 登录用户信息 {@link LoginUser}
      */
     public void setUserAgent(LoginUser user) {
-        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
-        String ip = IpAddrUtils.getIpAddress(ServletUtils.getRequest());
+        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtil.getRequest().getHeader("User-Agent"));
+        String ip = IpAddrUtil.getIpAddress(ServletUtil.getRequest());
         user.setIp(ip);
-        user.setLocation(LocationUtils.getRelativeLocation(ip));
+        user.setLocation(LocationUtil.getRelativeLocation(ip));
         user.setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getBrowserVersion());
         user.setOs(userAgent.getOperatingSystem().getName());
+    }
+
+    /**
+     * @param token token 信息 {@link String}
+     * @return 返回一个 Jws 类型的 token 数据声明信息
+     */
+    public Jws<Claims> getJws(String token) {
+        return Jwts.parserBuilder().setSigningKey(generalKey()).build().parseClaimsJws(token);
     }
 
     /**
@@ -125,7 +275,7 @@ public class RifyTokenService {
      * @return SecretKey
      */
     public SecretKey generalKey() {
-        byte[] encodedKey = Base64.getEncoder().encode(rifyConfig.getTokenEncryptKey().getBytes());
+        byte[] encodedKey = Base64.getEncoder().encode(tokenProp.getEncryptKey().getBytes());
         /*
         使用 len 的第一个 len 字节构造来自给定字节数组的 key, 从 offset 开始。
         构成密钥的字节是 key[offset] 和 key[offset + len - 1] 之间的字节
@@ -135,6 +285,6 @@ public class RifyTokenService {
             len - 密钥材料的长度
             algorithm - 与给定密钥材料关联的密钥算法的名称, AES 是一种对称加密算法
          */
-        return new SecretKeySpec(encodedKey, 0, encodedKey.length, "HmacSHA256");
+        return new SecretKeySpec(encodedKey, 0, encodedKey.length, tokenProp.getAlgorithm());
     }
 }

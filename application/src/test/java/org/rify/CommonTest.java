@@ -1,10 +1,10 @@
 package org.rify;
 
 import org.junit.jupiter.api.Test;
-import org.rify.common.config.RifyProperty;
+import org.rify.common.config.RifyEnvironment;
 import org.rify.common.core.domain.entity.HttpResult;
 import org.rify.common.core.http.HttpRequest;
-import org.rify.common.utils.IpAddrUtils;
+import org.rify.common.utils.IpAddrUtil;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 public class CommonTest {
 
     public @Test void ipTest() {
-        System.out.println(IpAddrUtils.getMultistageReverseProxyIp("192.168.1.100, 10.0.0.1, 203.0.113.5"));
+        System.out.println(IpAddrUtil.getMultistageReverseProxyIp("192.168.1.100, 10.0.0.1, 203.0.113.5"));
     }
 
     public @Test void httpTest() {
@@ -65,7 +65,7 @@ public class CommonTest {
     }
 
     public @Test void propertyTest() {
-        boolean[] arr = RifyProperty.instance.get("spring.security.enableds", boolean[].class);
+        boolean[] arr = RifyEnvironment.instance.get("spring.security.enableds", boolean[].class);
         System.out.println(Arrays.toString(arr));
     }
 }

@@ -6,6 +6,7 @@ import org.rify.common.core.domain.entity.HttpEntity;
 import org.rify.common.core.domain.model.RifyUser;
 import org.rify.core.web.service.RifyLoginService;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +26,9 @@ public class LoginController extends BaseController {
         String token = service.login(user);
         HttpEntity<String, Object> result = HttpEntity.instance(HttpStatus.OK.value());
         return result.put("登录成功", token);
+    }
+
+    public @GetMapping("/test") void test() {
+        log.info("------------------>");
     }
 }

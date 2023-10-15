@@ -1,5 +1,6 @@
 package org.rify.common.core.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
  * @className : LoginUser
  * @description : 登录用户身份权限
  */
+@JsonIgnoreProperties({"username", "password", "accountNonExpired", "credentialsNonExpired", "accountNonLocked", "enabled"})
 public class LoginUser implements UserDetails {
 
     // 用户唯一标识
@@ -30,6 +32,8 @@ public class LoginUser implements UserDetails {
     private RifyUser user;
     // 过期时间
     private Long expireTime;
+    // 刷新时间
+    private Long refreshTime;
     // 权限列表
     private List<String> permissions;
 
@@ -133,6 +137,14 @@ public class LoginUser implements UserDetails {
         this.expireTime = expireTime;
     }
 
+    public Long getRefreshTime() {
+        return refreshTime;
+    }
+
+    public void setRefreshTime(Long refreshTime) {
+        this.refreshTime = refreshTime;
+    }
+
     public List<String> getPermissions() {
         return permissions;
     }
@@ -153,6 +165,8 @@ public class LoginUser implements UserDetails {
         if (!Objects.equals(os, loginUser.os)) return false;
         if (!Objects.equals(user, loginUser.user)) return false;
         if (!Objects.equals(expireTime, loginUser.expireTime)) return false;
+        if (!Objects.equals(refreshTime, loginUser.refreshTime))
+            return false;
         return Objects.equals(permissions, loginUser.permissions);
     }
 
@@ -165,6 +179,7 @@ public class LoginUser implements UserDetails {
         result = 31 * result + (os != null ? os.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (expireTime != null ? expireTime.hashCode() : 0);
+        result = 31 * result + (refreshTime != null ? refreshTime.hashCode() : 0);
         result = 31 * result + (permissions != null ? permissions.hashCode() : 0);
         return result;
     }
@@ -179,6 +194,7 @@ public class LoginUser implements UserDetails {
                 ", os='" + os + '\'' +
                 ", user=" + user +
                 ", expireTime=" + expireTime +
+                ", refreshTime=" + refreshTime +
                 ", permissions=" + permissions +
                 '}';
     }

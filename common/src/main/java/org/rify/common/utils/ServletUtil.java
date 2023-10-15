@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
  * @author : lucas
  * @version 1.0
  * @date : 2023/9/28下午9:51
- * @className : ServletUtils
+ * @className : ServletUtil
  * @description : 客户端工具类
  */
-public class ServletUtils {
+public class ServletUtil {
 
     /**
      * 获取 ServletRequestAttributes 对象

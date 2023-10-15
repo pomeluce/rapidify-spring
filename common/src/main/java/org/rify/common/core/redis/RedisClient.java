@@ -1,9 +1,15 @@
 package org.rify.common.core.redis;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
+import org.rify.common.utils.JacksonUtil;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +23,21 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 public class RedisClient {
-    private @Resource RedisTemplate<String, String> redisTemplate;
+    private @Resource RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 初始化 redis 配置
+     */
+    private @PostConstruct void init() {
+        ObjectMapper mapper = JacksonUtil.instance();
+        mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(mapper, Object.class);
+        redisTemplate.setValueSerializer(serializer);
+        redisTemplate.setHashValueSerializer(serializer);
+        redisTemplate.setKeySerializer(RedisSerializer.string());
+        redisTemplate.setStringSerializer(RedisSerializer.string());
+        redisTemplate.setHashKeySerializer(RedisSerializer.string());
+    }
 
     /**
      * 查询 key 值, 支持模糊搜索
@@ -35,7 +55,7 @@ public class RedisClient {
      * @param key 要获取的 value 对应的 key 值 {@link String}
      * @return 返回一个 Object 类型的 value
      */
-    public Object value(String key) {
+    public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
@@ -43,9 +63,9 @@ public class RedisClient {
      * 设置值
      *
      * @param key   key 值 {@link String}
-     * @param value value 值 {@link String}
+     * @param value value 值 {@link Object}
      */
-    public void set(String key, String value) {
+    public void set(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
@@ -53,11 +73,11 @@ public class RedisClient {
      * 设置值
      *
      * @param key    key 值 {@link String}
-     * @param value  value 值 {@link String}
+     * @param value  value 值 {@link Object}
      * @param expire 过期时间
      * @param unit   时间单位
      */
-    public void set(String key, String value, Integer expire, TimeUnit unit) {
+    public void set(String key, Object value, Integer expire, TimeUnit unit) {
         redisTemplate.opsForValue().set(key, value, expire, unit);
     }
 
@@ -147,6 +167,17 @@ public class RedisClient {
      */
     public boolean hdel(Collection<String> collection) {
         return Objects.requireNonNull(redisTemplate.opsForHash().getOperations().delete(collection)) > 0;
+    }
+
+    /**
+     * 判断 key 是否存在 field 属性
+     *
+     * @param key   key 值 {@link String}
+     * @param field 属性 {@link String}
+     * @return 返回一个 boolean 类型的检查结果
+     */
+    public boolean hexists(String key, String field) {
+        return redisTemplate.opsForHash().hasKey(key, field);
     }
 
     /**

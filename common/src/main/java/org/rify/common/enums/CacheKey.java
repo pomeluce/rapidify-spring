@@ -5,10 +5,15 @@ package org.rify.common.enums;
  * @version 1.0
  * @date : 2023/9/29下午7:23
  * @className : CacheKey
- * @description : TODO(一句话描述该类的功能)
+ * @description : 缓存 key 枚举类
  */
 public enum CacheKey {
-    ACCESS_TOKEN_KEY("access_token");
+    TOKEN_LOGIN_USER_KEY("login_user"),
+    TOKEN_ACCESS_KEY("access_token"),
+    TOKEN_PREFIX_KEY("Bearer "),
+    TOKEN_BLACK_KEY("token_blacklist"),
+    TOKEN_EXPIRED_TIME_KEY("expired_time"),
+    TOKEN_REFRESH_TIME_KEY("refresh_time");
 
     private final String key;
 
