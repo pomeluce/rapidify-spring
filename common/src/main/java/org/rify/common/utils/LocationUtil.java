@@ -1,10 +1,12 @@
 package org.rify.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.rify.common.config.RifyProperty;
-import org.rify.common.core.http.HttpResult;
 import org.rify.common.core.http.HttpRequest;
+import org.rify.common.core.http.HttpResult;
 import org.springframework.http.HttpStatus;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -39,6 +41,20 @@ public class LocationUtil {
             return String.format("省份: %s 城市: %s", map.get("pro"), map.get("city"));
         }
         return UNKNOWN;
+    }
+
+    /**
+     * 根据语言简称获取 Locale 对象
+     *
+     * @param locale 要获取的 Local 对象的名称 {@link String}
+     * @return 返回一个 Locale 类型的 Local 对象
+     */
+    public static Locale resolveLocale(String locale) {
+        if (StringUtils.isEmpty(locale) || !locale.matches("^[a-z]{2}_[A-Z]{2}$")) {
+            return Locale.getDefault();
+        }
+        String[] lang = locale.split("_");
+        return Locale.of(lang[0], lang[1]);
     }
 
 }

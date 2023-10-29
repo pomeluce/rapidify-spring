@@ -2,13 +2,13 @@ package org.rify;
 
 import org.junit.jupiter.api.Test;
 import org.rify.common.config.RifyEnvironment;
-import org.rify.common.core.http.HttpResult;
 import org.rify.common.core.http.HttpRequest;
+import org.rify.common.core.http.HttpResult;
 import org.rify.common.utils.IpAddrUtil;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
  * @className : CommonTest
  * @description : common 模块测试类
  */
-@SpringBootTest
+// @SpringBootTest
 public class CommonTest {
 
     public @Test void ipTest() {
@@ -67,5 +67,14 @@ public class CommonTest {
     public @Test void propertyTest() {
         boolean[] arr = RifyEnvironment.instance.get("spring.security.enableds", boolean[].class);
         System.out.println(Arrays.toString(arr));
+    }
+
+    public @Test void localTest() {
+        Locale zhCn = Locale.of("zh", "CN");
+        System.out.println(zhCn.equals(Locale.SIMPLIFIED_CHINESE));
+        Locale zh = Locale.of("zh");
+        System.out.println(zh.equals(Locale.CHINESE));
+        // System.out.println(zhCn.equals(Locale.SIMPLIFIED_CHINESE));
+        // System.out.println(zhCn.equals(Locale.CHINESE));
     }
 }
