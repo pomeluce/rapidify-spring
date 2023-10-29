@@ -1,7 +1,6 @@
 package org.rify.common.core.http;
 
 import org.apache.commons.lang3.StringUtils;
-import org.rify.common.core.domain.entity.HttpResult;
 import org.rify.common.utils.JacksonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -3,7 +3,7 @@ package org.rify;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
-import org.rify.common.core.domain.model.RifyUser;
+import org.rify.common.core.domain.entity.RifyUser;
 import org.rify.server.system.mapper.RifyUserMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

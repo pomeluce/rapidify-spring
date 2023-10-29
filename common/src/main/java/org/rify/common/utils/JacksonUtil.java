@@ -9,7 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import org.rify.common.exception.CommonGlobalException;
+import org.rify.common.exception.RifyCommonUtilException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class JacksonUtil {
             return instance().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             log.error("JacksonUtil Serialization failed: {}", e.getMessage());
-            throw new CommonGlobalException("object convert to json failed", e);
+            throw new RifyCommonUtilException("object convert to json failed", e);
         }
     }
 
@@ -73,7 +73,7 @@ public class JacksonUtil {
             return instance().readValue(json, valueType);
         } catch (JsonProcessingException e) {
             log.error("JacksonUtil Deserialization failed: {}", e.getMessage());
-            throw new CommonGlobalException("json convert to object failed", e);
+            throw new RifyCommonUtilException("json convert to object failed", e);
         }
     }
 }

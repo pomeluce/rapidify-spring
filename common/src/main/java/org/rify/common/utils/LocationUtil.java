@@ -1,7 +1,7 @@
 package org.rify.common.utils;
 
 import org.rify.common.config.RifyProperty;
-import org.rify.common.core.domain.entity.HttpResult;
+import org.rify.common.core.http.HttpResult;
 import org.rify.common.core.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 

@@ -2,7 +2,7 @@ package org.rify;
 
 import org.junit.jupiter.api.Test;
 import org.rify.common.config.RifyEnvironment;
-import org.rify.common.core.domain.entity.HttpResult;
+import org.rify.common.core.http.HttpResult;
 import org.rify.common.core.http.HttpRequest;
 import org.rify.common.utils.IpAddrUtil;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -14,7 +14,7 @@ import org.rify.common.enums.CacheKey;
 import org.rify.common.utils.GenIdUtil;
 import org.rify.common.utils.IpAddrUtil;
 import org.rify.common.utils.LocationUtil;
-import org.rify.common.utils.ServletUtil;
+import org.rify.common.utils.spring.ServletClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -136,7 +136,8 @@ public class RifyTokenService {
      * @return 返回一个 LoginUser 类型的用户登录对象
      */
     public LoginUser getLoginUser(String token) {
-        return (LoginUser) redisClient.hget(CacheKey.TOKEN_LOGIN_USER_KEY.value(), token);
+        Object user = redisClient.hget(CacheKey.TOKEN_LOGIN_USER_KEY.value(), token);
+        return user != null ? (LoginUser) user : null;
     }
 
     /**
@@ -188,6 +189,18 @@ public class RifyTokenService {
     }
 
     /**
+     * 判断 token 是否过期并且加入黑名单中
+     *
+     * @param token token 信息 {@link String}
+     * @return 返回一个 boolean 类型的判断结果
+     */
+    public boolean isExpiredAndBlackList(String token) {
+        boolean expired = isExpired(token);
+        if (expired) putBlackList(token);
+        return expired;
+    }
+
+    /**
      * 设置 token 的过期时间
      *
      * @param token       token 信息 {@link String}
@@ -204,7 +217,8 @@ public class RifyTokenService {
      * @return 返回一个 Long 类型的过期时间
      */
     public long getExpiredTime(String token) {
-        return (Long) redisClient.hget(CacheKey.TOKEN_EXPIRED_TIME_KEY.value(), token);
+        Object expiredTime = redisClient.hget(CacheKey.TOKEN_EXPIRED_TIME_KEY.value(), token);
+        return expiredTime == null ? 0L : (Long) expiredTime;
     }
 
     /**
@@ -224,7 +238,8 @@ public class RifyTokenService {
      * @return 返回一个 Long 类型的刷新时间
      */
     public long getRefreshTime(String token) {
-        return (Long) redisClient.hget(CacheKey.TOKEN_REFRESH_TIME_KEY.value(), token);
+        Object refreshTime = redisClient.hget(CacheKey.TOKEN_REFRESH_TIME_KEY.value(), token);
+        return refreshTime == null ? 0L : (Long) refreshTime;
     }
 
     /**
@@ -253,8 +268,8 @@ public class RifyTokenService {
      * @param user 登录用户信息 {@link LoginUser}
      */
     public void setUserAgent(LoginUser user) {
-        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtil.getRequest().getHeader("User-Agent"));
-        String ip = IpAddrUtil.getIpAddress(ServletUtil.getRequest());
+        UserAgent userAgent = UserAgent.parseUserAgentString(ServletClient.getRequest().getHeader("User-Agent"));
+        String ip = IpAddrUtil.getIpAddress(ServletClient.getRequest());
         user.setIp(ip);
         user.setLocation(LocationUtil.getRelativeLocation(ip));
         user.setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getBrowserVersion());

@@ -2,8 +2,11 @@ package org.rify.core.web.service;
 
 import jakarta.annotation.Resource;
 import org.rify.common.core.domain.model.LoginUser;
-import org.rify.common.core.domain.model.RifyUser;
+import org.rify.common.exception.RifyServiceException;
+import org.rify.common.exception.user.RifyUserPasswordNotMatchException;
+import org.rify.core.security.context.AuthenticationContextHolder;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -23,16 +26,26 @@ public class RifyLoginService {
     /**
      * 用户登录
      *
-     * @param user 用户信息 {@link RifyUser}
+     * @param account  用户名 {@link String}
+     * @param password 密码 {@link String}
      * @return 返回 String 类型的 token 信息
      */
-    public String login(RifyUser user) {
-        // 获取 authenticationToken 对象
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword());
-        // 调用 authenticationManager 的 authenticate 方法进行登录验证
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
-        // 判断是否登录成功
-        if (authenticate == null) throw new RuntimeException("用户名或密码错误!");
+    public String login(String account, String password) {
+        Authentication authenticate;
+        try {
+            // 校验用户名和密码, 调用 UserDetailsService 实现类的 loadUserByUsername 方法
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(account, password);
+            AuthenticationContextHolder.setContext(authenticationToken);
+            authenticate = authenticationManager.authenticate(authenticationToken);
+        } catch (Exception e) {
+            if (e instanceof BadCredentialsException) {
+                throw new RifyUserPasswordNotMatchException();
+            } else {
+                throw new RifyServiceException(e.getMessage());
+            }
+        } finally {
+            AuthenticationContextHolder.clearContextOnExit();
+        }
         // 获取登录成功的用户信息
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         // 返回结果

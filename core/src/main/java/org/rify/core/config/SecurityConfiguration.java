@@ -5,10 +5,10 @@ import jakarta.annotation.Resource;
 import org.rify.common.config.RifyEnvironment;
 import org.rify.common.config.RifyProperty;
 import org.rify.core.security.filter.JwtAuthTokenFilter;
+import org.rify.core.security.handler.AuthEntryPointHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,6 +30,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class SecurityConfiguration {
     private @Resource AuthenticationConfiguration authenticationConfiguration;
+    private @Resource AuthEntryPointHandler entryPointHandler;
     private @Resource JwtAuthTokenFilter authTokenFilter;
     private @Resource RifyEnvironment env;
     private @Resource RifyProperty property;
@@ -81,16 +82,25 @@ public class SecurityConfiguration {
      * @throws Exception 抛出异常
      */
     public @Bean SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        return http
+                // 关闭 csrf
+                .csrf(AbstractHttpConfigurer::disable)
+                // 指定 session 的创建策略, 不使用 session
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(Customizer.withDefaults())
+                // 跨域配置
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // 进行认证请求的配置
                 .authorizeHttpRequests(auth -> auth
+                        // 放行接口
                         .requestMatchers(matchers)
                         .anonymous()
                         .anyRequest()
                         .authenticated()
                 )
-                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                // 认证过滤器
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                // 匿名访问和未授权访问处理器
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(entryPointHandler))
+                .build();
     }
 }

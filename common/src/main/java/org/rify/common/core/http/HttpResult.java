@@ -1,4 +1,4 @@
-package org.rify.common.core.domain.entity;
+package org.rify.common.core.http;
 
 import org.springframework.http.HttpStatus;
 
