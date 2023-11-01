@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.rify.common.core.domain.entity.HttpEntity;
+import org.rify.common.utils.StringUtils;
 import org.rify.common.utils.spring.ServletClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -25,14 +26,14 @@ public class AuthEntryPointHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         HttpStatus status = Objects.requireNonNullElse(HttpStatus.resolve(response.getStatus()), HttpStatus.UNAUTHORIZED);
-        String message = String.format(switch (status) {
+        String message = StringUtils.format(switch (status) {
             case HttpStatus.OK, HttpStatus.UNAUTHORIZED -> {
                 status = HttpStatus.UNAUTHORIZED;
-                yield "请求资源 %s 需要认证";
+                yield "请求资源 {} 需要认证";
             }
-            case HttpStatus.FORBIDDEN -> "请求资源 %s 需要授权";
-            case HttpStatus.NOT_FOUND -> "请求资源 %s 不存在";
-            default -> "请求访问资源 %s 失败";
+            case HttpStatus.FORBIDDEN -> "请求资源 {} 需要授权";
+            case HttpStatus.NOT_FOUND -> "请求资源 {} 不存在";
+            default -> "请求访问资源 {} 失败";
         }, ServletClient.getRequestURI());
         ServletClient.responseBody(response, HttpEntity.instance(status.value(), message));
     }

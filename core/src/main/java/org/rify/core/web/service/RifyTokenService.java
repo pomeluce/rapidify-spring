@@ -6,14 +6,14 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.rify.common.config.RifyProperty;
 import org.rify.common.core.domain.model.LoginUser;
 import org.rify.common.core.redis.RedisClient;
 import org.rify.common.enums.CacheKey;
 import org.rify.common.utils.GenIdUtil;
-import org.rify.common.utils.IpAddrUtil;
-import org.rify.common.utils.LocationUtil;
+import org.rify.common.utils.StringUtils;
+import org.rify.common.utils.location.IpAddrUtils;
+import org.rify.common.utils.location.LocationUtils;
 import org.rify.common.utils.spring.ServletClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -269,9 +269,9 @@ public class RifyTokenService {
      */
     public void setUserAgent(LoginUser user) {
         UserAgent userAgent = UserAgent.parseUserAgentString(ServletClient.getRequest().getHeader("User-Agent"));
-        String ip = IpAddrUtil.getIpAddress(ServletClient.getRequest());
+        String ip = IpAddrUtils.getIpAddress(ServletClient.getRequest());
         user.setIp(ip);
-        user.setLocation(LocationUtil.getRelativeLocation(ip));
+        user.setLocation(LocationUtils.getRelativeLocation(ip));
         user.setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getBrowserVersion());
         user.setOs(userAgent.getOperatingSystem().getName());
     }

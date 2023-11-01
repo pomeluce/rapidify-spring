@@ -36,7 +36,7 @@ public class HttpEntity<R, T> implements Serializable {
     /**
      * HttpEntity 构造实例
      *
-     * @param status 请求结果状态码 {@link int}
+     * @param status 请求结果状态码 {@link Integer}
      * @param <R>    泛型为 R
      * @param <T>    泛型为 T
      * @return 返回一个泛型为 R, T 的 HttpEntity 实体
@@ -48,7 +48,7 @@ public class HttpEntity<R, T> implements Serializable {
     /**
      * HttpEntity 构造实例
      *
-     * @param status  请求结果状态码 {@link int}
+     * @param status  请求结果状态码 {@link Integer}
      * @param message 请求结果信息 {@link String}
      * @param <R>     泛型为 R
      * @param <T>     泛型为 T
@@ -61,7 +61,7 @@ public class HttpEntity<R, T> implements Serializable {
     /**
      * HttpEntity 构造实例
      *
-     * @param status  请求结果状态码 {@link int}
+     * @param status  请求结果状态码 {@link Integer}
      * @param message 请求结果信息 {@link String}
      * @param data    请求结果数据 {@link R}
      * @param <R>     泛型为 R
@@ -75,7 +75,7 @@ public class HttpEntity<R, T> implements Serializable {
     /**
      * HttpEntity 构造实例
      *
-     * @param status  请求结果状态码 {@link int}
+     * @param status  请求结果状态码 {@link Integer}
      * @param message 请求结果信息 {@link String}
      * @param data    请求结果数据 {@link R}
      * @param body    请求结果信息体 {@link Map}

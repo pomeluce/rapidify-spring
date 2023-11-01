@@ -1,7 +1,7 @@
 package org.rify.common.core.http;
 
-import org.apache.commons.lang3.StringUtils;
 import org.rify.common.utils.JacksonUtil;
+import org.rify.common.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

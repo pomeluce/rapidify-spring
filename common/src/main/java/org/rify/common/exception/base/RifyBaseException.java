@@ -1,6 +1,6 @@
 package org.rify.common.exception.base;
 
-import org.apache.commons.lang3.StringUtils;
+import org.rify.common.utils.StringUtils;
 import org.rify.common.utils.spring.SpringMessage;
 
 /**

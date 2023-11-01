@@ -3,10 +3,10 @@ package org.rify.core.web.resolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.rify.common.config.RifyEnvironment;
-import org.rify.common.utils.LocationUtil;
+import org.rify.common.utils.StringUtils;
+import org.rify.common.utils.location.LocationUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.i18n.AbstractLocaleResolver;
 
 import java.util.ArrayList;
@@ -54,10 +54,10 @@ public class RifyLocaleResolver extends AbstractLocaleResolver {
     public @NonNull Locale resolveLocale(@NonNull HttpServletRequest request) {
         Locale defaultLocale = this.getDefaultLocale();
         String lang = request.getHeader(localeHeader);
-        if (defaultLocale != null && (!StringUtils.hasLength(lang) || !lang.matches("^[a-z]{2}_[A-Z]{2}$"))) {
+        if (defaultLocale != null && (StringUtils.isEmpty(lang) || !lang.matches(LocationUtils.LOCALE_REGEX))) {
             return defaultLocale;
         } else {
-            Locale requestLocale = LocationUtil.resolveLocale(lang);
+            Locale requestLocale = LocationUtils.resolveLocale(lang);
             List<Locale> supportedLocales = this.getSupportedLocales();
             if (!supportedLocales.isEmpty() && !supportedLocales.contains(requestLocale)) {
                 Locale supportedLocale = this.findSupportedLocale(request, supportedLocales);
@@ -100,6 +100,6 @@ public class RifyLocaleResolver extends AbstractLocaleResolver {
      * @param locale   国际化对象 {@link Locale}
      */
     public @Override void setLocale(@Nullable HttpServletRequest request, @Nullable HttpServletResponse response, @Nullable Locale locale) {
-        throw new UnsupportedOperationException(String.format("Cannot change HTTP %s header - use a different locale resolution strategy", localeHeader));
+        throw new UnsupportedOperationException(StringUtils.format("Cannot change HTTP {} header - use a different locale resolution strategy", localeHeader));
     }
 }

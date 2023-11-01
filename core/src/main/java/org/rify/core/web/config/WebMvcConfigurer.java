@@ -1,7 +1,7 @@
 package org.rify.core.web.config;
 
 import org.rify.common.config.RifyEnvironment;
-import org.rify.common.utils.LocationUtil;
+import org.rify.common.utils.location.LocationUtils;
 import org.rify.core.web.resolver.RifyLocaleResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ public class WebMvcConfigurer implements org.springframework.web.servlet.config.
      */
     public @Bean LocaleResolver localeResolver() {
         @SuppressWarnings("unchecked") List<String> locales = RifyEnvironment.instance.get("spring.messages.support-locale", List.class, Collections.singletonList("zh_CN"));
-        List<Locale> supportLocales = locales.stream().filter(locale -> locale.matches("^[a-z]{2}_[A-Z]{2}$")).map(LocationUtil::resolveLocale).distinct().toList();
+        List<Locale> supportLocales = locales.stream().filter(locale -> locale.matches(LocationUtils.LOCALE_REGEX)).map(LocationUtils::resolveLocale).distinct().toList();
         RifyLocaleResolver resolver = new RifyLocaleResolver();
         resolver.setSupportedLocales(supportLocales);
         resolver.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);

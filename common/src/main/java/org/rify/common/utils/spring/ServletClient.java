@@ -3,9 +3,9 @@ package org.rify.common.utils.spring;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.apache.commons.lang3.StringUtils;
 import org.rify.common.core.domain.entity.HttpEntity;
 import org.rify.common.utils.JacksonUtil;
+import org.rify.common.utils.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

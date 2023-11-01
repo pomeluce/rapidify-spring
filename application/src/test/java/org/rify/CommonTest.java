@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.rify.common.config.RifyEnvironment;
 import org.rify.common.core.http.HttpRequest;
 import org.rify.common.core.http.HttpResult;
-import org.rify.common.utils.IpAddrUtil;
+import org.rify.common.utils.StringUtils;
+import org.rify.common.utils.location.IpAddrUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 public class CommonTest {
 
     public @Test void ipTest() {
-        System.out.println(IpAddrUtil.getMultistageReverseProxyIp("192.168.1.100, 10.0.0.1, 203.0.113.5"));
+        System.out.println(IpAddrUtils.getMultistageReverseProxyIp("192.168.1.100, 10.0.0.1, 203.0.113.5"));
     }
 
     public @Test void httpTest() {
@@ -76,5 +77,9 @@ public class CommonTest {
         System.out.println(zh.equals(Locale.CHINESE));
         // System.out.println(zhCn.equals(Locale.SIMPLIFIED_CHINESE));
         // System.out.println(zhCn.equals(Locale.CHINESE));
+    }
+
+    public @Test void stringTest() {
+        System.out.println(StringUtils.format("{{}} 测试 \\\\\\{}", "hello", "world"));
     }
 }

@@ -1,7 +1,7 @@
-package org.rify.common.utils;
+package org.rify.common.utils.location;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
+import org.rify.common.utils.StringUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -11,10 +11,10 @@ import java.util.Arrays;
  * @author : lucas
  * @version 1.0
  * @date : 2023/9/29上午11:29
- * @className : IpAddrUtil
+ * @className : IpAddrUtils
  * @description : ip 地址工具类
  */
-public class IpAddrUtil {
+public class IpAddrUtils {
     private static final String[] HEADERS_TO_TRY = {
             "X-Forwarded-For",
             "Proxy-Client-IP",
