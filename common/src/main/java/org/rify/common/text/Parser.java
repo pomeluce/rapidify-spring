@@ -15,6 +15,7 @@ import java.util.Objects;
 public final class Parser implements Serializable {
     private static final String ESCAPE = "\\";
     private static final String ANTI_ESCAPE = "\\\\";
+    private static final TextConvert TEXT_CONVERT = TextConvert.instance();
 
     public String parser(final String openTag, final String closeTag, final String text, final Object... args) {
         if (Objects.isNull(args) || args.length == 0) return text;
@@ -29,7 +30,7 @@ public final class Parser implements Serializable {
             boolean isEscape = text.startsWith(ESCAPE, index - ESCAPE.length());
             if (index == 0 || (index > 0 && !isEscape) || (index > 1 && text.startsWith(ANTI_ESCAPE, index - ANTI_ESCAPE.length()))) {
                 buffer.append(text, offset, isEscape ? index - 1 : index);
-                buffer.append(args[i]);
+                buffer.append(TEXT_CONVERT.toString(args[i]));
                 offset = index + (openTag + closeTag).length();
             } else if (index > 0) {
                 buffer.append(text, offset, index);
