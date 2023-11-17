@@ -16,7 +16,7 @@ public class SecurityUtils {
      * 生成加密密码
      *
      * @param password 密码 {@link String}
-     * @return 返回一个 String 类型的加密密码
+     * @return 返回一个 {@link String} 类型的加密密码
      */
     public static String encoderPassword(String password) {
         return ENCODER.encode(password);
@@ -27,9 +27,9 @@ public class SecurityUtils {
      *
      * @param rowPassword     原始密码 {@link String}
      * @param encodedPassword 加密密码 {@link String}
-     * @return 返回一个 boolean 类型的判断结果
+     * @return 返回一个 {@link Boolean} 类型的判断结果
      */
-    public static boolean mathches(String rowPassword, String encodedPassword) {
+    public static boolean matches(String rowPassword, String encodedPassword) {
         return ENCODER.matches(rowPassword, encodedPassword);
     }
 }

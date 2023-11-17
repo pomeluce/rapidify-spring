@@ -20,6 +20,19 @@ public class ObjectUtilsTest {
         System.out.println(ObjectUtils.merge(c1, c2));
     }
 
+    public @Test void cloneTest() {
+        Cat c1 = new Cat("lulu", 3, "black", "mammal");
+        Dog dog = new Dog();
+        dog.name = "mimi";
+        c1.setDog(dog);
+        Cat c2 = ObjectUtils.clone(c1);
+        System.out.println(c1);
+        c2.getDog().name = "jiujiu";
+        c2.setName("xiaohei");
+        System.out.println(c1);
+        System.out.println(c2);
+    }
+
     public @Test void deepCloneTest() {
         RifyUser user1 = new RifyUser();
         user1.setAccount("2222222");
@@ -39,12 +52,21 @@ class Cat implements Serializable {
     private int age;
     private String color;
     private String type;
+    private Dog dog;
 
     public Cat(String name, int age, String color, String type) {
         this.name = name;
         this.age = age;
         this.color = color;
         this.type = type;
+    }
+
+    public Dog getDog() {
+        return dog;
+    }
+
+    public void setDog(Dog dog) {
+        this.dog = dog;
     }
 
     public String getName() {
@@ -86,6 +108,18 @@ class Cat implements Serializable {
                 ", age=" + age +
                 ", color='" + color + '\'' +
                 ", type='" + type + '\'' +
+                ", dog=" + dog +
+                '}';
+    }
+}
+
+class Dog {
+    String name;
+
+    @Override
+    public String toString() {
+        return "Dog{" +
+                "name='" + name + '\'' +
                 '}';
     }
 }

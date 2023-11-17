@@ -50,7 +50,8 @@ public class RifyUserDetailsService implements UserDetailsService {
      */
     private void validateUser(RifyUser user) {
         Authentication context = AuthenticationContextHolder.getContext();
-        if (!SecurityUtils.mathches(context.getCredentials().toString(), user.getPassword())) {
+        if (!SecurityUtils.matches(context.getCredentials().toString(), user.getPassword())) {
+            // TODO: 登录校验
             log.warn("密码错误");
         }
     }
