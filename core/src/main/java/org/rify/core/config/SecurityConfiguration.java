@@ -2,7 +2,6 @@ package org.rify.core.config;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
-import org.rify.common.config.RifyEnvironment;
 import org.rify.common.config.RifyProperty;
 import org.rify.core.security.filter.JwtAuthTokenFilter;
 import org.rify.core.security.handler.AuthEntryPointHandler;
@@ -32,13 +31,12 @@ public class SecurityConfiguration {
     private @Resource AuthenticationConfiguration authenticationConfiguration;
     private @Resource AuthEntryPointHandler entryPointHandler;
     private @Resource JwtAuthTokenFilter authTokenFilter;
-    private @Resource RifyEnvironment env;
     private @Resource RifyProperty property;
     private String[] matchers = {"/**"};
 
     private @PostConstruct void init() {
-        Boolean enabled = env.get("spring.security.enabled", Boolean.class, true);
-        matchers = Boolean.TRUE.equals(enabled) ? env.get("spring.security.matchers", String[].class) : matchers;
+        Boolean enabled = property.getSecurity().isEnabled();
+        matchers = Boolean.TRUE.equals(enabled) ? property.getSecurity().getMatchers().toArray(String[]::new) : matchers;
     }
 
     /**

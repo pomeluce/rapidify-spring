@@ -6,7 +6,7 @@
 
     <groupId>org.rify</groupId>
     <artifactId>rapidify-spring</artifactId>
-    <version>1.0.0</version>
+    <version>2024.1.1</version>
     <packaging>pom</packaging>
 
     <name>rapidify-spring</name>
@@ -25,14 +25,13 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <java.version>21</java.version>
-        <rify.version>1.0.0</rify.version>
-        <redis.version>3.0.4</redis.version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
-        <druid.version>1.2.19</druid.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <knife4j.version>4.3.0</knife4j.version>
-        <jackson.version>2.15.2</jackson.version>
-        <jwt.version>0.11.5</jwt.version>
+        <spring.version>3.3.0</spring.version>
+        <mybatis-plus.version>3.5.7</mybatis-plus.version>
+        <druid.version>1.2.23</druid.version>
+        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <knife4j.version>4.5.0</knife4j.version>
+        <jackson.version>2.17.1</jackson.version>
+        <jwt.version>0.12.5</jwt.version>
         <user-agent.version>1.21</user-agent.version>
     </properties>
 
@@ -42,7 +41,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.1.4</version>
+                <version>${spring.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -50,7 +49,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>${redis.version}</version>
+                <version>${spring.version}</version>
             </dependency>
 
             <dependency>
@@ -80,6 +79,16 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
                 <version>${jackson.version}</version>
             </dependency>
             <dependency>
@@ -114,33 +123,46 @@
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>common</artifactId>
-                <version>${rify.version}</version>
+                <version>2024.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>core</artifactId>
-                <version>${rify.version}</version>
+                <version>2024.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>jobs</artifactId>
-                <version>${rify.version}</version>
+                <version>2024.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>generator</artifactId>
-                <version>${rify.version}</version>
+                <version>2024.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>server</artifactId>
-                <version>${rify.version}</version>
+                <version>2024.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>application</artifactId>
-                <version>${rify.version}</version>
+                <version>2024.1.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.16.2</version>
+                <configuration>
+                   <!-- 不生成 backup pom 文件 -->
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

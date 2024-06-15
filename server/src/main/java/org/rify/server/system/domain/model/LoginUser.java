@@ -1,7 +1,7 @@
-package org.rify.common.core.domain.model;
+package org.rify.server.system.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.rify.common.core.domain.entity.RifyUser;
+import org.rify.server.system.domain.entity.RifyUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

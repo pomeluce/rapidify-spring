@@ -17,6 +17,5 @@ public class RifyRestApiConfig implements WebMvcConfigurer {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.addPathPrefix("/api", config -> config.isAnnotationPresent(RestApiController.class));
-        System.out.println("--->" + configurer.getPathMatcher());
     }
 }

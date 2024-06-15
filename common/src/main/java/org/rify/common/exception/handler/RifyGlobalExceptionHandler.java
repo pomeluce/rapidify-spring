@@ -1,7 +1,7 @@
 package org.rify.common.exception.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.rify.common.core.domain.entity.HttpEntity;
+import org.rify.common.core.domain.HttpEntity;
 import org.rify.common.exception.RifyServiceException;
 import org.rify.common.exception.user.RifyUserPasswordNotMatchException;
 import org.slf4j.Logger;

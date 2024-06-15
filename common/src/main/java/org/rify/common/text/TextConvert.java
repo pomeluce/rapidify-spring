@@ -33,7 +33,7 @@ public final class TextConvert implements Serializable {
      *
      * @param bytes       待转换的字节数组 {@link Byte[]}
      * @param charsetName 转换字符集名称 {@link String}
-     * @return 返回一个 String 类型的转换结果
+     * @return 返回一个 {@link String} 类型的转换结果
      */
     public String string(byte[] bytes, String charsetName) {
         return string(bytes, Charset.forName(charsetName, DEFAULT_CHARSET));
@@ -47,7 +47,7 @@ public final class TextConvert implements Serializable {
      *
      * @param bytes   待转换的字节数组 {@link Byte[]}
      * @param charset 转换字符集 {@link Charset}
-     * @return 返回一个 String 类型的转换结果
+     * @return 返回一个 {@link String} 类型的转换结果
      */
     public String string(byte[] bytes, Charset charset) {
         return Objects.isNull(bytes) ? null : new String(bytes, Objects.isNull(charset) ? DEFAULT_CHARSET : charset);
@@ -61,7 +61,7 @@ public final class TextConvert implements Serializable {
      *
      * @param buffer      待转换的 byteBuffer 对象 {@link ByteBuffer}
      * @param charsetName 转换字符集名称 {@link Charset}
-     * @return 返回一个 String 类型的转换结果
+     * @return 返回一个 {@link String} 类型的转换结果
      */
     public String string(ByteBuffer buffer, String charsetName) {
         return string(buffer, Charset.forName(charsetName, DEFAULT_CHARSET));
@@ -75,7 +75,7 @@ public final class TextConvert implements Serializable {
      *
      * @param buffer  待转换的 byteBuffer 对象 {@link ByteBuffer}
      * @param charset 转换字符集 {@link Charset}
-     * @return 返回一个 String 类型的转换结果
+     * @return 返回一个 {@link String} 类型的转换结果
      */
     public String string(ByteBuffer buffer, Charset charset) {
         return (Objects.isNull(charset) ? DEFAULT_CHARSET : charset).decode(buffer).toString();
@@ -89,7 +89,7 @@ public final class TextConvert implements Serializable {
      *
      * @param arg         待转化的 object 对象 {@link Object}
      * @param charsetName 转换字符集名称 {@link String}
-     * @return 返回一个 String 类型的转换结果
+     * @return 返回一个 {@link String} 类型的转换结果
      */
     public String string(Object arg, String charsetName) {
         return string(arg, Charset.forName(charsetName, DEFAULT_CHARSET));
@@ -103,7 +103,7 @@ public final class TextConvert implements Serializable {
      *
      * @param arg     待转化的 object 对象 {@link Object}
      * @param charset 转换字符集 {@link Charset}
-     * @return 返回一个 String 类型的转换结果
+     * @return 返回一个 {@link String} 类型的转换结果
      */
     public String string(Object arg, Charset charset) {
         return switch (arg) {
@@ -123,7 +123,7 @@ public final class TextConvert implements Serializable {
      * <br>
      *
      * @param text 待转换的 object 对象 {@link Object}
-     * @return 返回一个 String 类型的转换结果
+     * @return 返回一个 {@link String} 类型的转换结果
      */
     public String toString(Object text) {
         return string(text, DEFAULT_CHARSET);

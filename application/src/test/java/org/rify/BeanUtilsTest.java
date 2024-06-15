@@ -1,7 +1,7 @@
 package org.rify;
 
 import org.junit.jupiter.api.Test;
-import org.rify.common.core.domain.entity.RifyUser;
+import org.rify.server.system.domain.entity.RifyUser;
 import org.rify.common.utils.beans.BeanUtils;
 
 import java.beans.PropertyDescriptor;
@@ -28,11 +28,11 @@ public class BeanUtilsTest {
     public @Test void copyPropertiesTest() {
         RifyUser user1 = new RifyUser();
         user1.setAccount("2222222");
-        user1.setAge(20);
+        // user1.setAge(20);
         user1.setEmail(null);
 
         RifyUser user2 = new RifyUser();
-        user2.setAge(18);
+        // user2.setAge(18);
         user2.setEmail("aaaaaaaaa");
         BeanUtils.copyProperties(user1, user2);
         System.out.println(user2);

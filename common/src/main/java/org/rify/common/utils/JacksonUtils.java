@@ -13,6 +13,7 @@ import org.rify.common.exception.RifyCommonUtilException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,12 +22,12 @@ import java.time.format.DateTimeFormatter;
  * @author : lucas
  * @version 1.0
  * @date : 2023/9/29下午3:25
- * @className : JacksonUtil
+ * @className : JacksonUtils
  * @description : jackson 工具类
  */
-public class JacksonUtil {
+public class JacksonUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(JacksonUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(JacksonUtils.class);
 
     /**
      * 获取 ObjectMapper 对象
@@ -36,11 +37,12 @@ public class JacksonUtil {
     public static ObjectMapper instance() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"));
         JavaTimeModule timeModule = new JavaTimeModule();
-        timeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        timeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         timeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        timeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         timeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        timeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         mapper.registerModule(timeModule);
         return mapper;
     }
@@ -49,7 +51,7 @@ public class JacksonUtil {
      * 将 object 对象转换为 json 字符串
      *
      * @param obj 待转换的 object 对象 {@link Object}
-     * @return 返回一个 string 类型的 json 字符串
+     * @return 返回一个 {@link String} 类型的 json 字符串
      */
     public static String toJsonString(Object obj) {
         try {
@@ -66,7 +68,7 @@ public class JacksonUtil {
      * @param json      待转换的 json 字符串 {@link String}
      * @param valueType 待转换的类型 {@link Class<T>}
      * @param <T>       泛型参数
-     * @return 返回一个 T 类型的 object
+     * @return 返回一个 {@link T} 类型的 object 对象
      */
     public static <T> T parseValue(String json, Class<T> valueType) {
         try {

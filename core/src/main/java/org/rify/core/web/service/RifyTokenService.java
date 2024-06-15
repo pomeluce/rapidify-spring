@@ -1,13 +1,14 @@
 package org.rify.core.web.service;
 
 import eu.bitwalker.useragentutils.UserAgent;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.rify.common.config.RifyProperty;
-import org.rify.common.core.domain.model.LoginUser;
 import org.rify.common.core.redis.RedisClient;
 import org.rify.common.enums.CacheKey;
 import org.rify.common.utils.GenIdUtil;
@@ -15,6 +16,7 @@ import org.rify.common.utils.StringUtils;
 import org.rify.common.utils.location.IpAddrUtils;
 import org.rify.common.utils.location.LocationUtils;
 import org.rify.common.utils.spring.ServletClient;
+import org.rify.server.system.domain.model.LoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,19 +59,20 @@ public class RifyTokenService {
         long currentTimeMillis = System.currentTimeMillis();
         return Jwts.builder()
                 // 设置唯一编号
-                .setId(GenIdUtil.timestamp().toString())
+                .id(GenIdUtil.timestamp().toString())
                 // 设置主题
-                .setSubject("rify-create-token")
+                .subject("rify-create-token")
                 // 签发日期
-                .setIssuedAt(new Date(currentTimeMillis))
+                .issuedAt(new Date(currentTimeMillis))
                 // 设置签发者
-                .setIssuer(tokenProp.getIssuer())
+                .issuer(tokenProp.getIssuer())
                 // 设置过期时间
-                .setExpiration(new Date(currentTimeMillis + tokenProp.getExpireTime() * MILLIS))
+                .expiration(new Date(currentTimeMillis + tokenProp.getExpireTime() * MILLIS))
                 // 自定义属性
-                .addClaims(claims)
+                .claims(claims)
                 // 设置签名使用的签名算法和签名使用的秘钥
-                .signWith(generalKey(), SignatureAlgorithm.HS256).compact();
+                .signWith(generalKey(), Jwts.SIG.HS256)
+                .compact();
     }
 
     /**
@@ -149,10 +152,9 @@ public class RifyTokenService {
     public boolean checkToken(String token) {
         try {
             getJws(token);
-        } catch (ExpiredJwtException e) {
+        } catch (JwtException e) {
             log.error("token information is expired: [{}]", e.getMessage());
-        } catch (UnsupportedJwtException | SignatureException | MalformedJwtException |
-                 IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             log.error("token information parsing failed, failed info: [{}]", e.getMessage());
             return false;
         }
@@ -281,7 +283,7 @@ public class RifyTokenService {
      * @return 返回一个 Jws 类型的 token 数据声明信息
      */
     public Jws<Claims> getJws(String token) {
-        return Jwts.parserBuilder().setSigningKey(generalKey()).build().parseClaimsJws(token);
+        return Jwts.parser().verifyWith(generalKey()).build().parseSignedClaims(token);
     }
 
     /**

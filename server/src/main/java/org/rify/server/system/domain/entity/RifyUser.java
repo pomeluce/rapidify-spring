@@ -1,10 +1,11 @@
-package org.rify.common.core.domain.entity;
+package org.rify.server.system.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,28 +20,17 @@ public class RifyUser implements Serializable {
     private @TableId Integer id;
     private String account;
     private String password;
-    private Boolean status;
-    private Integer age;
     private String email;
+    private Boolean status;
+    private Boolean isDelete;
+    private String role;
+    private List<String> permissions;
     private String createBy;
-    private LocalDateTime createTime;
+    private Timestamp createTime;
     private String updateBy;
-    private LocalDateTime updateTime;
+    private Timestamp updateTime;
 
     public RifyUser() {
-    }
-
-    public RifyUser(Integer id, String account, String password, Boolean status, Integer age, String email, String createBy, LocalDateTime createTime, String updateBy, LocalDateTime updateTime) {
-        this.id = id;
-        this.account = account;
-        this.password = password;
-        this.status = status;
-        this.age = age;
-        this.email = email;
-        this.createBy = createBy;
-        this.createTime = createTime;
-        this.updateBy = updateBy;
-        this.updateTime = updateTime;
     }
 
     public Integer getId() {
@@ -67,6 +57,14 @@ public class RifyUser implements Serializable {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Boolean getStatus() {
         return status;
     }
@@ -75,20 +73,28 @@ public class RifyUser implements Serializable {
         this.status = status;
     }
 
-    public Integer getAge() {
-        return age;
+    public Boolean getDelete() {
+        return isDelete;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
     }
 
-    public String getEmail() {
-        return email;
+    public String getRole() {
+        return role;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
     }
 
     public String getCreateBy() {
@@ -99,11 +105,11 @@ public class RifyUser implements Serializable {
         this.createBy = createBy;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
@@ -115,11 +121,11 @@ public class RifyUser implements Serializable {
         this.updateBy = updateBy;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Timestamp getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -131,9 +137,12 @@ public class RifyUser implements Serializable {
         if (!Objects.equals(id, rifyUser.id)) return false;
         if (!Objects.equals(account, rifyUser.account)) return false;
         if (!Objects.equals(password, rifyUser.password)) return false;
-        if (!Objects.equals(status, rifyUser.status)) return false;
-        if (!Objects.equals(age, rifyUser.age)) return false;
         if (!Objects.equals(email, rifyUser.email)) return false;
+        if (!Objects.equals(status, rifyUser.status)) return false;
+        if (!Objects.equals(isDelete, rifyUser.isDelete)) return false;
+        if (!Objects.equals(role, rifyUser.role)) return false;
+        if (!Objects.equals(permissions, rifyUser.permissions))
+            return false;
         if (!Objects.equals(createBy, rifyUser.createBy)) return false;
         if (!Objects.equals(createTime, rifyUser.createTime)) return false;
         if (!Objects.equals(updateBy, rifyUser.updateBy)) return false;
@@ -145,9 +154,11 @@ public class RifyUser implements Serializable {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (account != null ? account.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (age != null ? age.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (permissions != null ? permissions.hashCode() : 0);
         result = 31 * result + (createBy != null ? createBy.hashCode() : 0);
         result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
         result = 31 * result + (updateBy != null ? updateBy.hashCode() : 0);
@@ -161,10 +172,12 @@ public class RifyUser implements Serializable {
                 "id=" + id +
                 ", account='" + account + '\'' +
                 ", password='" + password + '\'' +
-                ", status=" + status +
-                ", age=" + age +
                 ", email='" + email + '\'' +
-                ", creatBy='" + createBy + '\'' +
+                ", status=" + status +
+                ", isDelete=" + isDelete +
+                ", role='" + role + '\'' +
+                ", permissions=" + permissions +
+                ", createBy='" + createBy + '\'' +
                 ", createTime=" + createTime +
                 ", updateBy='" + updateBy + '\'' +
                 ", updateTime=" + updateTime +

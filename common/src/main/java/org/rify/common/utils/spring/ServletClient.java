@@ -3,8 +3,8 @@ package org.rify.common.utils.spring;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.rify.common.core.domain.entity.HttpEntity;
-import org.rify.common.utils.JacksonUtil;
+import org.rify.common.core.domain.HttpEntity;
+import org.rify.common.utils.JacksonUtils;
 import org.rify.common.utils.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -93,7 +93,7 @@ public class ServletClient {
         response.setStatus(httpEntity.getCode());
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter writer = response.getWriter();
-        writer.write(JacksonUtil.toJsonString(httpEntity));
+        writer.write(JacksonUtils.toJsonString(httpEntity));
         writer.flush();
         writer.close();
     }

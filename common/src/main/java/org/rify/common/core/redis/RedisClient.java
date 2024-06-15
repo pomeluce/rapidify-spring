@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
-import org.rify.common.utils.JacksonUtil;
+import org.rify.common.utils.JacksonUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,7 +29,7 @@ public class RedisClient {
      * 初始化 redis 配置
      */
     private @PostConstruct void init() {
-        ObjectMapper mapper = JacksonUtil.instance();
+        ObjectMapper mapper = JacksonUtils.instance();
         mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(mapper, Object.class);
         redisTemplate.setValueSerializer(serializer);

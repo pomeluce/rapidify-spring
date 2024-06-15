@@ -64,7 +64,7 @@ public final class ObjectUtils {
      * @return 返回一个泛型为 {@link  T} 类型的默认值
      */
     private static @SuppressWarnings("unchecked") <T> T defaultBaseValue(Class<T> targetType) {
-        return targetType.getSimpleName().endsWith("[]") ? (T) Array.newInstance(targetType.getComponentType(), 0) : switch (targetType.getSimpleName()) {
+        return switch (targetType.getSimpleName()) {
             case "byte" -> (T) Byte.valueOf((byte) 0);
             case "short" -> (T) Short.valueOf((short) 0);
             case "int" -> (T) Integer.valueOf(0);
@@ -85,7 +85,7 @@ public final class ObjectUtils {
      * @return 返回一个泛型为 {@link  T} 类型的默认值
      */
     public static @SuppressWarnings("unchecked") <T> T defaultClassValue(Class<T> targetType) {
-        T value = defaultBaseValue(targetType);
+        T value = targetType.getSimpleName().endsWith("[]") ? (T) Array.newInstance(targetType.getComponentType(), 0) : defaultBaseValue(targetType);
 
         if (value == null) {
             Constructor<T> constructor = (Constructor<T>) Arrays.stream(targetType.getDeclaredConstructors()).findFirst().orElseThrow(

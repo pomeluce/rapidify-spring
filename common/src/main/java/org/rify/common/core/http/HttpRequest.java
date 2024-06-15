@@ -1,6 +1,6 @@
 package org.rify.common.core.http;
 
-import org.rify.common.utils.JacksonUtil;
+import org.rify.common.utils.JacksonUtils;
 import org.rify.common.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,7 +197,7 @@ public class HttpRequest {
      * @return 返回一个 HttpResult 类型的请求结果
      */
     public HttpResult POST(String url, Object body) {
-        return request(url, "POST", JacksonUtil.toJsonString(body));
+        return request(url, "POST", JacksonUtils.toJsonString(body));
     }
 
     /**
@@ -209,7 +209,7 @@ public class HttpRequest {
      * @return 返回一个 HttpResult 类型的请求结果
      */
     public HttpResult POST(String url, Object body, Map<String, String> headers) {
-        return request(url, "POST", JacksonUtil.toJsonString(body), headers);
+        return request(url, "POST", JacksonUtils.toJsonString(body), headers);
     }
 
     /**
@@ -220,7 +220,7 @@ public class HttpRequest {
      * @return 返回一个 HttpResult 类型的请求结果
      */
     public HttpResult PUT(String url, Object body) {
-        return request(url, "PUT", JacksonUtil.toJsonString(body));
+        return request(url, "PUT", JacksonUtils.toJsonString(body));
     }
 
     /**
@@ -232,7 +232,7 @@ public class HttpRequest {
      * @return 返回一个 HttpResult 类型的请求结果
      */
     public HttpResult PUT(String url, Object body, Map<String, String> headers) {
-        return request(url, "PUT", JacksonUtil.toJsonString(body), headers);
+        return request(url, "PUT", JacksonUtils.toJsonString(body), headers);
     }
 
     /**

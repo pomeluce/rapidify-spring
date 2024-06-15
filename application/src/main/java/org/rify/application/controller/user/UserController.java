@@ -1,11 +1,11 @@
 package org.rify.application.controller.user;
 
 import org.rify.common.annotation.RestApiController;
-import org.rify.common.core.domain.entity.HttpEntity;
-import org.rify.common.core.domain.entity.RifyUser;
-import org.rify.common.core.domain.model.LoginUser;
+import org.rify.common.core.domain.HttpEntity;
+import org.rify.common.utils.spring.SecurityUtils;
+import org.rify.server.system.domain.entity.RifyUser;
+import org.rify.server.system.domain.model.LoginUser;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class UserController {
 
     public @GetMapping("/current") HttpEntity<RifyUser, Object> currentUser() {
-        LoginUser user = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginUser user = (LoginUser) SecurityUtils.getAuthentication().getPrincipal();
         HttpEntity<RifyUser, Object> result = HttpEntity.instance(HttpStatus.OK.value());
         return result.put("当前登录用户", user.getUser()).put(new HashMap<>() {{
             put("role", "");

@@ -1,7 +1,7 @@
 package org.rify;
 
 import org.junit.jupiter.api.Test;
-import org.rify.common.core.domain.entity.RifyUser;
+import org.rify.server.system.domain.entity.RifyUser;
 import org.rify.common.utils.ObjectUtils;
 
 import java.io.Serializable;

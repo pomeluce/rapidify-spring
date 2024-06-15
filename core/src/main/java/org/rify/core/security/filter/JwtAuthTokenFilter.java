@@ -5,9 +5,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.rify.common.core.domain.model.LoginUser;
 import org.rify.common.utils.StringUtils;
+import org.rify.common.utils.spring.SecurityUtils;
 import org.rify.common.utils.spring.ServletClient;
+import org.rify.server.system.domain.model.LoginUser;
 import org.rify.core.web.service.RifyTokenService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -35,7 +36,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
         // 从请求头获取 token
         String token = tokenService.getToken(request);
         // 判断 token 是否为空, 检查 token 是否有效, 是否在黑名单中, 是否已认证
-        if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication()) && StringUtils.isNotEmpty(token) && tokenService.checkToken(token) && tokenService.isNotBlackList(token)) {
+        if (Objects.isNull(SecurityUtils.getAuthentication()) && StringUtils.isNotEmpty(token) && tokenService.checkToken(token) && tokenService.isNotBlackList(token)) {
             // 判断 token 是否过期, 将过期 token 加入黑名单, 判断是否可以刷新 token
             if (tokenService.isExpiredAndBlackList(token) && tokenService.isRefresh(token)) {
                 // 生成新 token

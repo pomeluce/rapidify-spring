@@ -3,7 +3,7 @@ package org.rify.common.utils.location;
 import org.rify.common.config.RifyProperty;
 import org.rify.common.core.http.HttpRequest;
 import org.rify.common.core.http.HttpResult;
-import org.rify.common.utils.JacksonUtil;
+import org.rify.common.utils.JacksonUtils;
 import org.rify.common.utils.StringUtils;
 import org.springframework.http.HttpStatus;
 
@@ -39,7 +39,7 @@ public class LocationUtils {
 
         // 是否为开启了定位功能, 并且获取定位信息成功
         if (RIFY_CONFIG.isEnableLocation() && (result = HttpRequest.instance().GET(IP + "?ip=" + ip + "&json=true")).statusCode() == HttpStatus.OK.value()) {
-            @SuppressWarnings("unchecked") Map<String, String> map = JacksonUtil.parseValue(result.body(), Map.class);
+            @SuppressWarnings("unchecked") Map<String, String> map = JacksonUtils.parseValue(result.body(), Map.class);
             return StringUtils.format("省份: {} 城市: {}", map.get("pro"), map.get("city"));
         }
         return UNKNOWN;

@@ -3,9 +3,9 @@ package org.rify.core.security.handler;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.rify.common.core.domain.entity.HttpEntity;
-import org.rify.common.utils.StringUtils;
+import org.rify.common.core.domain.HttpEntity;
 import org.rify.common.utils.spring.ServletClient;
+import org.rify.common.utils.spring.SpringMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -26,15 +26,15 @@ public class AuthEntryPointHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         HttpStatus status = Objects.requireNonNullElse(HttpStatus.resolve(response.getStatus()), HttpStatus.UNAUTHORIZED);
-        String message = StringUtils.format(switch (status) {
+        String message = SpringMessage.message(switch (status) {
             case HttpStatus.OK, HttpStatus.UNAUTHORIZED -> {
                 status = HttpStatus.UNAUTHORIZED;
-                yield "请求资源 {} 需要认证";
+                yield "resource.require.authentication";
             }
-            case HttpStatus.FORBIDDEN -> "请求资源 {} 需要授权";
-            case HttpStatus.NOT_FOUND -> "请求资源 {} 不存在";
-            default -> "请求访问资源 {} 失败";
-        }, ServletClient.getRequestURI());
+            case HttpStatus.FORBIDDEN -> "resource.require.authorization";
+            case HttpStatus.NOT_FOUND -> "resource.not.exist";
+            default -> "resource.access.failed";
+        }, request, ServletClient.getRequestURI());
         ServletClient.responseBody(response, HttpEntity.instance(status.value(), message));
     }
 }

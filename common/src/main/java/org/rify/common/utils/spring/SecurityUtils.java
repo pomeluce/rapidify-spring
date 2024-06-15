@@ -1,5 +1,7 @@
 package org.rify.common.utils.spring;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -20,6 +22,15 @@ public class SecurityUtils {
      */
     public static String encoderPassword(String password) {
         return ENCODER.encode(password);
+    }
+
+    /**
+     * 获取 authentication 验证对象
+     *
+     * @return 返回一个 {@link Authentication} 类型的验证对象
+     */
+    public static Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
     /**

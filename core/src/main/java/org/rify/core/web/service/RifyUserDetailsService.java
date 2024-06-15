@@ -2,12 +2,12 @@ package org.rify.core.web.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
-import org.rify.common.core.domain.entity.RifyUser;
-import org.rify.common.core.domain.model.LoginUser;
 import org.rify.common.exception.RifyServiceException;
 import org.rify.common.utils.spring.SecurityUtils;
 import org.rify.common.utils.spring.SpringMessage;
 import org.rify.core.security.context.AuthenticationContextHolder;
+import org.rify.server.system.domain.entity.RifyUser;
+import org.rify.server.system.domain.model.LoginUser;
 import org.rify.server.system.mapper.RifyUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

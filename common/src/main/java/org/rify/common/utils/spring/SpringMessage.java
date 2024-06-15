@@ -1,7 +1,9 @@
 package org.rify.common.utils.spring;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.web.servlet.LocaleResolver;
 
 /**
  * @author : lucas
@@ -17,11 +19,21 @@ public class SpringMessage {
      *
      * @param key    消息 key {@link String}
      * @param params 参数 {@link Object}
-     * @return 返回一个 String 类型的国际化信息
+     * @return 返回一个 {@link String} 类型的国际化信息
      */
     public static String message(String key, Object... params) {
-        MessageSource message = SpringClient.getBean(MessageSource.class);
-        return message.getMessage(key, params, LocaleContextHolder.getLocale());
+        return SpringClient.getBean(MessageSource.class).getMessage(key, params, LocaleContextHolder.getLocale());
     }
 
+    /**
+     * 获取国际化信息
+     *
+     * @param key     消息 key {@link String}
+     * @param request 请求对象 {@link HttpServletRequest}
+     * @param params  参数 {@link Object}
+     * @return 返回一个 {@link String} 类型的国际化信息
+     */
+    public static String message(String key, HttpServletRequest request, Object... params) {
+        return SpringClient.getBean(MessageSource.class).getMessage(key, params, SpringClient.getBean(LocaleResolver.class).resolveLocale(request));
+    }
 }

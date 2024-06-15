@@ -18,6 +18,7 @@ import java.util.List;
 public class RifyProperty {
     private static RifyProperty instance;
     private Config config;
+    private Security security;
     private Token token;
     private Cors cors;
 
@@ -30,6 +31,35 @@ public class RifyProperty {
 
     public static RifyProperty instance() {
         return instance;
+    }
+
+    public Security getSecurity() {
+        return security;
+    }
+
+    public void setSecurity(Security security) {
+        this.security = security;
+    }
+
+    public static class Security {
+        private boolean enabled = false;
+        private List<String> matchers;
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public List<String> getMatchers() {
+            return matchers;
+        }
+
+        public void setMatchers(List<String> matchers) {
+            this.matchers = matchers;
+        }
     }
 
     public Config getConfig() {

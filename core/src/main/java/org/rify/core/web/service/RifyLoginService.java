@@ -1,10 +1,10 @@
 package org.rify.core.web.service;
 
 import jakarta.annotation.Resource;
-import org.rify.common.core.domain.model.LoginUser;
 import org.rify.common.exception.RifyServiceException;
 import org.rify.common.exception.user.RifyUserPasswordNotMatchException;
 import org.rify.core.security.context.AuthenticationContextHolder;
+import org.rify.server.system.domain.model.LoginUser;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

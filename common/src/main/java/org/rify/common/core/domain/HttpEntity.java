@@ -1,4 +1,6 @@
-package org.rify.common.core.domain.entity;
+package org.rify.common.core.domain;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -12,15 +14,16 @@ import java.util.Objects;
  * @className : HttpEntity
  * @description : http 请求返回实体
  */
+@Schema(description = "http 请求相应实体")
 public class HttpEntity<R, T> implements Serializable {
     /* 请求结果状态码 */
-    private int code;
+    private @Schema(description = "状态码") int code;
     /* 请求结果信息 */
-    private String message;
+    private @Schema(description = "响应信息") String message;
     /* 请求结果数据 */
-    private R data;
+    private @Schema(description = "响应结果") R data;
     /* 请求结果信息体 */
-    private Map<String, T> body = new HashMap<>();
+    private @Schema(description = "响应体") Map<String, T> body = new HashMap<>();
 
     /**
      * HttpEntity 构造实例
@@ -93,7 +96,7 @@ public class HttpEntity<R, T> implements Serializable {
      * @param message 请求结果信息 {@link String}
      * @return 返回一个泛型为 R, T 的 HttpEntity 实体
      */
-    public HttpEntity<R, T> put(String message) {
+    public HttpEntity<R, T> set(String message) {
         this.message = message;
         return this;
     }
