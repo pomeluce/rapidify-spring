@@ -47,12 +47,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
@@ -159,7 +153,7 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>2.16.2</version>
                 <configuration>
-                   <!-- 不生成 backup pom 文件 -->
+                    <!-- 不生成 backup pom 文件 -->
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
             </plugin>

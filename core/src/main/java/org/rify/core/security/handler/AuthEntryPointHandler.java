@@ -1,6 +1,5 @@
 package org.rify.core.security.handler;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.rify.common.core.domain.HttpEntity;
@@ -24,7 +23,7 @@ import java.util.Objects;
 @Component
 public class AuthEntryPointHandler implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         HttpStatus status = Objects.requireNonNullElse(HttpStatus.resolve(response.getStatus()), HttpStatus.UNAUTHORIZED);
         String message = SpringMessage.message(switch (status) {
             case HttpStatus.OK, HttpStatus.UNAUTHORIZED -> {

@@ -4,6 +4,7 @@
     <data-source source="LOCAL" name="PostgreSQL" uuid="0fc6bd57-a2ae-47d6-bd8b-c656c4c7dff7">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
+      <auto-commit>false</auto-commit>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/rifydb</jdbc-url>
       <jdbc-additional-properties>
@@ -12,6 +13,7 @@
         <property name="com.intellij.clouds.kubernetes.db.resource.type" value="Deployment" />
         <property name="com.intellij.clouds.kubernetes.db.container.port" />
       </jdbc-additional-properties>
+      <vm-options>-Duser.timezone=Asia/Shanghai</vm-options>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

@@ -91,7 +91,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         // 放行接口
                         .requestMatchers(matchers)
-                        .anonymous()
+                        // 登录接口有无认证都可以访问
+                        .permitAll()
                         .anyRequest()
                         .authenticated()
                 )
