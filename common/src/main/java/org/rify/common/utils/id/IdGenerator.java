@@ -1,4 +1,4 @@
-package org.rify.common.utils;
+package org.rify.common.utils.id;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -8,10 +8,10 @@ import java.util.UUID;
  * @author : lucas
  * @version 1.0
  * @date : 2023/9/28下午8:21
- * @className : GenIdUtil
+ * @className : IdGenerator
  * @description : id 生成工具类
  */
-public class GenIdUtil {
+public class IdGenerator {
 
     /**
      * 随机生成 uuid

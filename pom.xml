@@ -6,7 +6,7 @@
 
     <groupId>org.rify</groupId>
     <artifactId>rapidify-spring</artifactId>
-    <version>2024.1.1</version>
+    <version>2024.2.1</version>
     <packaging>pom</packaging>
 
     <name>rapidify-spring</name>
@@ -14,7 +14,7 @@
     <modules>
         <module>common</module>
         <module>core</module>
-        <module>jobs</module>
+        <module>job</module>
         <module>generator</module>
         <module>server</module>
         <module>application</module>
@@ -25,13 +25,13 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <java.version>21</java.version>
-        <spring.version>3.3.0</spring.version>
+        <spring.version>3.3.2</spring.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <druid.version>1.2.23</druid.version>
-        <commons-lang3.version>3.14.0</commons-lang3.version>
+        <commons-lang3.version>3.15.0</commons-lang3.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <jackson.version>2.17.1</jackson.version>
-        <jwt.version>0.12.5</jwt.version>
+        <jackson.version>2.17.2</jackson.version>
+        <jwt.version>0.12.6</jwt.version>
         <user-agent.version>1.21</user-agent.version>
     </properties>
 
@@ -117,32 +117,32 @@
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>common</artifactId>
-                <version>2024.1.1</version>
+                <version>2024.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>core</artifactId>
-                <version>2024.1.1</version>
+                <version>2024.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
-                <artifactId>jobs</artifactId>
-                <version>2024.1.1</version>
+                <artifactId>job</artifactId>
+                <version>2024.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>generator</artifactId>
-                <version>2024.1.1</version>
+                <version>2024.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>server</artifactId>
-                <version>2024.1.1</version>
+                <version>2024.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.rify</groupId>
                 <artifactId>application</artifactId>
-                <version>2024.1.1</version>
+                <version>2024.2.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

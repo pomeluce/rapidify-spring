@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.rify.common.config.RifyProperty;
 import org.rify.common.core.redis.RedisClient;
 import org.rify.common.enums.CacheKey;
-import org.rify.common.utils.GenIdUtil;
+import org.rify.common.utils.id.IdGenerator;
 import org.rify.common.utils.StringUtils;
 import org.rify.common.utils.location.IpAddrUtils;
 import org.rify.common.utils.location.LocationUtils;
@@ -59,7 +59,7 @@ public class RifyTokenService {
         long currentTimeMillis = System.currentTimeMillis();
         return Jwts.builder()
                 // 设置唯一编号
-                .id(GenIdUtil.timestamp().toString())
+                .id(IdGenerator.timestamp().toString())
                 // 设置主题
                 .subject("rify-create-token")
                 // 签发日期
@@ -83,7 +83,7 @@ public class RifyTokenService {
      */
     public String accessToken(LoginUser user) {
         long currentTime = System.currentTimeMillis();
-        String uid = GenIdUtil.randomUUID();
+        String uid = IdGenerator.randomUUID();
         user.setUid(uid);
         setUserAgent(user);
         user.setExpireTime(currentTime + tokenProp.getExpireTime() * MILLIS);

@@ -1,7 +1,9 @@
 package org.rify.common.core.controller;
 
+import org.rify.common.core.domain.HttpEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author : lucas
@@ -13,4 +15,12 @@ import org.slf4j.LoggerFactory;
 public class BaseController {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    protected <R> HttpEntity<R, Object> error(String message) {
+        return error(message, null);
+    }
+
+    protected <R> HttpEntity<R, Object> error(String message, R data) {
+        return HttpEntity.instance(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, data);
+    }
 }
