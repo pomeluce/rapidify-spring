@@ -1,7 +1,13 @@
 package org.rify.server.system.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+import org.rify.server.system.domain.enums.RifyUserStatus;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -11,33 +17,39 @@ import java.util.Objects;
 /**
  * @author : lucas
  * @version 1.0
- * @date : 2023/9/27下午11:23
+ * @date : 2023/9/2 11:23
  * @className : RifyUser
  * @description : 用户实体类
  */
-@TableName(value = "rify_user")
+@Entity
+@Table(name = "rify_user")
 public class RifyUser implements Serializable {
-    private @TableId Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String account;
     private String password;
     private String email;
-    private Boolean status;
-    private Boolean isDelete;
+    @Enumerated(EnumType.STRING)
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
+    private RifyUserStatus status;
     private String role;
+    @Type(ListArrayType.class)
+    @Column(name = "permissions", columnDefinition = "varchar array")
     private List<String> permissions;
     private String createBy;
-    private Timestamp createTime;
+    private @CreationTimestamp Timestamp createTime;
     private String updateBy;
-    private Timestamp updateTime;
+    private @UpdateTimestamp Timestamp updateTime;
 
     public RifyUser() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,20 +77,12 @@ public class RifyUser implements Serializable {
         this.email = email;
     }
 
-    public Boolean getStatus() {
+    public RifyUserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(RifyUserStatus status) {
         this.status = status;
-    }
-
-    public Boolean getDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(Boolean delete) {
-        isDelete = delete;
     }
 
     public String getRole() {
@@ -132,38 +136,14 @@ public class RifyUser implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RifyUser rifyUser)) return false;
-
-        if (!Objects.equals(id, rifyUser.id)) return false;
-        if (!Objects.equals(account, rifyUser.account)) return false;
-        if (!Objects.equals(password, rifyUser.password)) return false;
-        if (!Objects.equals(email, rifyUser.email)) return false;
-        if (!Objects.equals(status, rifyUser.status)) return false;
-        if (!Objects.equals(isDelete, rifyUser.isDelete)) return false;
-        if (!Objects.equals(role, rifyUser.role)) return false;
-        if (!Objects.equals(permissions, rifyUser.permissions))
-            return false;
-        if (!Objects.equals(createBy, rifyUser.createBy)) return false;
-        if (!Objects.equals(createTime, rifyUser.createTime)) return false;
-        if (!Objects.equals(updateBy, rifyUser.updateBy)) return false;
-        return Objects.equals(updateTime, rifyUser.updateTime);
+        if (o == null || getClass() != o.getClass()) return false;
+        RifyUser rifyUser = (RifyUser) o;
+        return Objects.equals(id, rifyUser.id) && Objects.equals(account, rifyUser.account) && Objects.equals(password, rifyUser.password) && Objects.equals(email, rifyUser.email) && Objects.equals(status, rifyUser.status) && Objects.equals(role, rifyUser.role) && Objects.equals(permissions, rifyUser.permissions) && Objects.equals(createBy, rifyUser.createBy) && Objects.equals(createTime, rifyUser.createTime) && Objects.equals(updateBy, rifyUser.updateBy) && Objects.equals(updateTime, rifyUser.updateTime);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (account != null ? account.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + (isDelete != null ? isDelete.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
-        result = 31 * result + (permissions != null ? permissions.hashCode() : 0);
-        result = 31 * result + (createBy != null ? createBy.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (updateBy != null ? updateBy.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        return result;
+        return Objects.hash(id, account, password, email, status, role, permissions, createBy, createTime, updateBy, updateTime);
     }
 
     @Override
@@ -174,7 +154,6 @@ public class RifyUser implements Serializable {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", status=" + status +
-                ", isDelete=" + isDelete +
                 ", role='" + role + '\'' +
                 ", permissions=" + permissions +
                 ", createBy='" + createBy + '\'' +

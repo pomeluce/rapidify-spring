@@ -1,11 +1,14 @@
+drop table if exists rify_user;
+drop type rify_user_status;
+
+create type rify_user_status as enum ('ENABLED', 'DISABLED', 'DELETE');
 create table rify_user
 (
     id          serial primary key not null,
-    account     varchar(20)        not null,
+    account     varchar(20) unique not null,
     password    varchar(100)       not null,
     email       varchar(50)        not null,
-    status      bool default true,
-    is_delete   bool default false,
+    status      rify_user_status,
     role        varchar(100),
     permissions varchar array,
     create_by   varchar(20),
@@ -19,9 +22,7 @@ comment on column rify_user.id is '用户 ID';
 comment on column rify_user.account is '账号';
 comment on column rify_user.password is '密码';
 comment on column rify_user.email is '邮箱';
-comment on column rify_user.status is '状态: 是否启用';
-comment on column rify_user.is_delete is '是否删除';
-comment on column rify_user.role is '角色';
+comment on column rify_user.status is '状态: 是否启用, 是否删除, 是否锁定';
 comment on column rify_user.permissions is '权限列表';
 comment on column rify_user.create_by is '创建人';
 comment on column rify_user.create_time is '创建时间';

@@ -21,6 +21,7 @@ public class RifyProperty {
     private Security security;
     private Token token;
     private Cors cors;
+    private User user;
 
     /**
      * 初始化 RifyConfig 对象
@@ -173,6 +174,38 @@ public class RifyProperty {
 
         public void setAllowedMethods(List<String> allowedMethods) {
             this.allowedMethods = allowedMethods;
+        }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public static class User {
+        private Integer maxRetries;
+        private Integer lockTime;
+
+        public Integer getMaxRetries() {
+            return maxRetries;
+        }
+
+        public Integer getLockTime() {
+            return lockTime;
+        }
+
+        public void setMaxRetries(Integer maxRetries) {
+            this.maxRetries = maxRetries;
+        }
+
+        /**
+         * @param lockTime 锁定时间 单位分钟 {@link Integer}
+         */
+        public void setLockTime(Integer lockTime) {
+            this.lockTime = lockTime;
         }
     }
 }

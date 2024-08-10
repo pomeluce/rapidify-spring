@@ -81,9 +81,7 @@ public class HttpRequest {
     }
 
     public static HttpRequest instance(String baseURL, long timeout, Map<String, String> headers) {
-        HttpRequest request = new HttpRequest();
-        request.baseURL = baseURL;
-        request.timeout = timeout;
+        HttpRequest request = instance(baseURL, timeout);
         request.headers = headers;
         return request;
     }

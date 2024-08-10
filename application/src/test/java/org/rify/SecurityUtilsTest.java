@@ -1,12 +1,11 @@
 package org.rify;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.rify.common.utils.spring.SecurityUtils;
 import org.rify.core.web.service.RifyTokenService;
 import org.rify.server.system.domain.entity.RifyUser;
-import org.rify.server.system.mapper.RifyUserMapper;
+import org.rify.server.system.repository.RifyUserRepository;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -20,11 +19,11 @@ import java.util.List;
  */
 @SpringBootTest
 public class SecurityUtilsTest {
-    private @Resource RifyUserMapper mapper;
+    private @Resource RifyUserRepository repository;
     private @Resource RifyTokenService service;
 
     public @Test void findAll() {
-        List<RifyUser> selectList = mapper.selectList(new LambdaQueryWrapper<>());
+        List<RifyUser> selectList = repository.findAll();
         selectList.forEach(System.out::println);
     }
 

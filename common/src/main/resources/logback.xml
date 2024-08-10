@@ -13,16 +13,6 @@
         定义的值会被插入到logger上下文中。定义变量后，可以使"${}"来使用变量。
     -->
     <property name="log.path" value="rify_log"/>
-    <!--
-        使用 mybatis 的时候, sql 语句是 debug 下才会打印, 而这里我们只配置了 info, 所以想要查看 sql 语句的话
-        有以下两种操作:
-            1.  <root level="info"> 改成 <root level="DEBUG"> 这样就会打印sql, 不过这样日志那边会出现很多其他消息
-            2. 就是单独给 dao 下目录配置 debug 模式, 代码如下, 这样配置 sql 语句会打印, 其他还是正常 info 级别:
-               application 配置文件: [ logging.level.org.mybatis=debug logging.level.mapper=debug ]
-               logger配置:
-                   <logger name="org.rify.mapper" level="debug"/>
-                   <logger name="org.mybatis" level="debug"/>
-     -->
     <!-- 开发环境: 打印控制台 -->
     <springProfile name="dev">
 
@@ -169,8 +159,6 @@
                        如果未设置此属性, 那么当前 logger 将会继承上级的级别
                 additivity: 是否向上级 logger 传递打印信息, 默认是 true
         -->
-        <logger name="org.rify.mapper" level="debug"/>
-        <logger name="org.mybatis" level="debug"/>
         <root level="info">
             <appender-ref ref="DEBUG_FILE"/>
             <appender-ref ref="INFO_FILE"/>

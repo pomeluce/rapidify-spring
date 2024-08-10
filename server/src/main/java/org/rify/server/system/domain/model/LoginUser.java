@@ -2,6 +2,7 @@ package org.rify.server.system.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.rify.server.system.domain.entity.RifyUser;
+import org.rify.server.system.domain.enums.RifyUserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -67,7 +68,7 @@ public class LoginUser implements UserDetails {
 
     /* 账号是否可用 */
     public @Override boolean isEnabled() {
-        return user.getStatus();
+        return RifyUserStatus.ENABLED.equals(user.getStatus());
     }
 
     public LoginUser() {

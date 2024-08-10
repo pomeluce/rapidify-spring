@@ -131,4 +131,16 @@ public final class ObjectUtils {
         BeanUtils.copyProperties(source, t, BeanCopyOptions.instance().ignoreNullValue().setOverride(isOverride));
         return t;
     }
+
+    /**
+     * 判断对象是否为空, 如果为空返回默认值, 否则返回原值
+     *
+     * @param value        要判断的值 {@link Object}
+     * @param defaultValue 默认值 {@link T}
+     * @param <T>          泛型
+     * @return 返回一个 {@link T} 类型的值
+     */
+    public static @SuppressWarnings("unchecked") <T> T isEmpty(Object value, T defaultValue) {
+        return value == null ? defaultValue : (T) value;
+    }
 }
