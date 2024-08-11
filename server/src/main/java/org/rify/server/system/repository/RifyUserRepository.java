@@ -1,11 +1,11 @@
 package org.rify.server.system.repository;
 
+import org.rify.common.core.repository.BaseRepository;
 import org.rify.server.system.domain.entity.RifyUser;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.stereotype.Repository;
+import org.rify.server.system.domain.enums.RifyUserStatus;
+import org.springframework.data.repository.NoRepositoryBean;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,7 +15,10 @@ import java.util.Optional;
  * @className : RifyUserRepository
  * @description : RifyUser 数据持久层
  */
-@Repository
-public interface RifyUserRepository extends JpaRepository<RifyUser, Long>, JpaSpecificationExecutor<RifyUser>, QuerydslPredicateExecutor<RifyUser> {
-    Optional<RifyUser> findRifyUserByAccount(String account);
+@NoRepositoryBean
+public interface RifyUserRepository extends BaseRepository<RifyUser, Long> {
+
+    Optional<RifyUser> findByAccount(String account);
+
+    Optional<List<RifyUser>> findByStatus(RifyUserStatus status);
 }

@@ -1,17 +1,18 @@
 package org.rify;
 
-import com.blazebit.persistence.querydsl.BlazeJPAQueryFactory;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.rify.common.utils.spring.SecurityUtils;
-import org.rify.core.types.ProjectionsQMap;
 import org.rify.server.system.domain.entity.QRifyUser;
 import org.rify.server.system.domain.entity.RifyUser;
 import org.rify.server.system.domain.enums.RifyUserStatus;
 import org.rify.server.system.repository.RifyUserRepository;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author : lucas
@@ -24,27 +25,48 @@ import java.util.Map;
 public class RifyUserTest {
 
     private @Resource RifyUserRepository repository;
-    private @Resource BlazeJPAQueryFactory factory;
 
     public @Test void save() {
         String[] names = {"zhangsan", "lisi", "wangwu", "jack", "alan", "amy", "xiaoming", "liyang"};
         for (String name : names) {
-
+            RifyUser user = RifyUser.builder()
+                    .account(name).password(SecurityUtils.encoderPassword(name + "pass"))
+                    .email(name + "@gmail.com").status(RifyUserStatus.ENABLED)
+                    .role("everyone").permissions(List.of("user"))
+                    .createBy(name).updateBy(name)
+                    .build();
+            repository.save(user);
         }
-        RifyUser user = new RifyUser();
-        user.setAccount("zhangsan");
-        user.setPassword(SecurityUtils.encoderPassword("password"));
-        user.setEmail("zhangsan@qq.com");
-        user.setStatus(RifyUserStatus.ENABLED);
-        repository.save(user);
     }
 
-    public @Test void findRifyUserByAccount() {
+    @Test
+    void findRifyUserByAccountTest() {
+        System.out.println(repository.findByAccount("zhangsan").orElseThrow());
+    }
+
+    public @Test void findByPage() {
         QRifyUser user = QRifyUser.rifyUser;
-        Map<String, ?> result = factory.select(ProjectionsQMap.builder(user.account.as("username"), user.email))
-                .from(user)
-                .where(user.account.eq("zhangsan"))
-                .fetchOne();
-        System.out.println(result);
+        PageRequest page = PageRequest.of(2, 2, Sort.by(Sort.Direction.ASC, "id").ascending());
+
+        Optional<List<RifyUser>> list = repository.findByStatus(RifyUserStatus.ENABLED);
+        System.out.println(list);
+
+        // List<RifyUser> list = factory.selectFrom(user)
+        //         .where(user.status.eq(RifyUserStatus.ENABLED))
+        //         .offset(page.getOffset())
+        //         .limit(page.getPageSize())
+        //         .fetch();
+
+        // BlazeJPAQuery<RifyUser> query = factory.selectFrom(user)
+        //         .where(user.status.eq(RifyUserStatus.ENABLED))
+        //         .orderBy(user.id.asc());
+        //
+        // query.orderBy(user.id.asc());
+        //
+        // List<RifyUser> list = factory.selectFrom(user)
+        //         .where(user.status.eq(RifyUserStatus.ENABLED))
+        //         .orderBy(user.id.asc())
+        //         .fetchPage((int) page.getOffset(), page.getPageSize());
+        // System.out.println(list);
     }
 }

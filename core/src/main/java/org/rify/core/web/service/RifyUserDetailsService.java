@@ -41,7 +41,7 @@ public class RifyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        RifyUser user = repository.findRifyUserByAccount(username).orElseThrow(() -> {
+        RifyUser user = repository.findByAccount(username).orElseThrow(() -> {
             log.error("当前登录用户:{} 不存在", username);
             return new RifyServiceException(SpringMessage.message("login.user.not.exists", username));
         });

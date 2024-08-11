@@ -1,11 +1,14 @@
 package org.rify.server.system.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 import org.rify.server.system.domain.entity.RifyUser;
 import org.rify.server.system.domain.enums.RifyUserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -17,8 +20,11 @@ import java.util.Objects;
  * @className : LoginUser
  * @description : 登录用户身份权限
  */
+@Getter
+@Setter
 @JsonIgnoreProperties({"username", "password", "accountNonExpired", "credentialsNonExpired", "accountNonLocked", "enabled"})
 public class LoginUser implements UserDetails {
+    private static final @Serial long serialVersionUID = 1L;
 
     // 用户唯一标识
     private String uid;
@@ -81,78 +87,6 @@ public class LoginUser implements UserDetails {
 
     public LoginUser(RifyUser user) {
         this.user = user;
-    }
-
-    public RifyUser getUser() {
-        return user;
-    }
-
-    public void setUser(RifyUser user) {
-        this.user = user;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getBrowser() {
-        return browser;
-    }
-
-    public void setBrowser(String browser) {
-        this.browser = browser;
-    }
-
-    public String getOs() {
-        return os;
-    }
-
-    public void setOs(String os) {
-        this.os = os;
-    }
-
-    public Long getExpireTime() {
-        return expireTime;
-    }
-
-    public void setExpireTime(Long expireTime) {
-        this.expireTime = expireTime;
-    }
-
-    public Long getRefreshTime() {
-        return refreshTime;
-    }
-
-    public void setRefreshTime(Long refreshTime) {
-        this.refreshTime = refreshTime;
-    }
-
-    public List<String> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
     }
 
     @Override
