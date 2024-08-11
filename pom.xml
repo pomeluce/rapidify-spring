@@ -26,6 +26,8 @@
         <maven.compiler.target>21</maven.compiler.target>
         <java.version>21</java.version>
         <spring.version>3.3.2</spring.version>
+        <querydsl.version>5.1.0</querydsl.version>
+        <blaze-persistence.version>1.6.12</blaze-persistence.version>
         <hypersistence.version>3.8.2</hypersistence.version>
         <druid.version>1.2.23</druid.version>
         <commons-lang3.version>3.15.0</commons-lang3.version>
@@ -44,6 +46,38 @@
                 <version>${spring.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- querydsl, blase-persistence 分页 -->
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-jpa</artifactId>
+                <version>${querydsl.version}</version>
+                <classifier>jakarta</classifier>
+            </dependency>
+            <dependency>
+                <groupId>com.blazebit</groupId>
+                <artifactId>blaze-persistence-integration-querydsl-expressions-jakarta</artifactId>
+                <version>${blaze-persistence.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.blazebit</groupId>
+                <artifactId>blaze-persistence-core-api-jakarta</artifactId>
+                <version>${blaze-persistence.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.blazebit</groupId>
+                <artifactId>blaze-persistence-core-impl-jakarta</artifactId>
+                <version>${blaze-persistence.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.blazebit</groupId>
+                <artifactId>blaze-persistence-integration-hibernate-6.2</artifactId>
+                <version>${blaze-persistence.version}</version>
+                <scope>runtime</scope>
             </dependency>
 
             <!-- hibernate 特殊类型映射 -->
@@ -159,5 +193,32 @@
                 </configuration>
             </plugin>
         </plugins>
+        <!-- querydsl Q 类生成 -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <generatedSourcesDirectory>${project.build.directory}/generated-sources/java</generatedSourcesDirectory>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>com.querydsl</groupId>
+                                <artifactId>querydsl-apt</artifactId>
+                                <version>${querydsl.version}</version>
+                                <classifier>jakarta</classifier>
+                            </path>
+                            <path>
+                                <groupId>jakarta.persistence</groupId>
+                                <artifactId>jakarta.persistence-api</artifactId>
+                                <version>3.1.0</version>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 </project>

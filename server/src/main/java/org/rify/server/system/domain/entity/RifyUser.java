@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.rify.server.system.domain.enums.RifyUserStatus;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "rify_user")
 public class RifyUser implements Serializable {
+    private static final @Serial long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
