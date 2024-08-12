@@ -3,10 +3,7 @@ package org.rify.common.core.page;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringPath;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.rify.common.utils.StringUtils;
 import org.springframework.data.domain.Sort;
 
@@ -22,6 +19,7 @@ import java.util.Optional;
  * @description : 分页对象
  */
 @Builder
+@AllArgsConstructor
 @Getter
 @Setter
 public class Pageable implements Serializable {
