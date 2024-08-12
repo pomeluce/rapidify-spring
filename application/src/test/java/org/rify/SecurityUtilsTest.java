@@ -4,8 +4,8 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.rify.common.utils.spring.SecurityUtils;
 import org.rify.core.web.service.RifyTokenService;
-import org.rify.server.system.domain.entity.RifyUser;
-import org.rify.server.system.repository.RifyUserRepository;
+import org.rify.server.system.domain.entity.User;
+import org.rify.server.system.repository.SystemUserRepository;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -19,11 +19,11 @@ import java.util.List;
  */
 @SpringBootTest
 public class SecurityUtilsTest {
-    private @Resource RifyUserRepository repository;
+    private @Resource SystemUserRepository repository;
     private @Resource RifyTokenService service;
 
     public @Test void findAll() {
-        List<RifyUser> selectList = repository.findAll();
+        List<User> selectList = repository.findAll();
         selectList.forEach(System.out::println);
     }
 

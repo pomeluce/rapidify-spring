@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.rify.common.core.domain.HttpEntity;
+import org.rify.common.text.TextConvert;
 import org.rify.common.utils.JacksonUtils;
 import org.rify.common.utils.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -23,6 +24,50 @@ import java.util.stream.Collectors;
  * @description : 客户端工具类
  */
 public class ServletClient {
+
+    static final TextConvert convert = TextConvert.instance();
+
+    /**
+     * 根据 name 获取 request 参数
+     *
+     * @param name 参数名称
+     * @return 返回一个 String 类型的参数值
+     */
+    public static String getParameter(String name) {
+        return getRequest().getParameter(name);
+    }
+
+    /**
+     * 根据 name 获取 request 参数
+     *
+     * @param name         参数名称
+     * @param defaultValue 默认值
+     * @return 返回一个 String 类型的参数值
+     */
+    public static String getParameter(String name, String defaultValue) {
+        return convert.toString(getParameter(name), defaultValue);
+    }
+
+    /**
+     * 根据 name 获取 request 参数
+     *
+     * @param name 参数名称
+     * @return 返回一个 {@link Integer} 类型的参数值
+     */
+    public static Integer getIntegerParameter(String name) {
+        return convert.toInt(getParameter(name));
+    }
+
+    /**
+     * 根据 name 获取 request 参数
+     *
+     * @param name         参数名称
+     * @param defaultValue 默认值
+     * @return 返回一个 {@link Integer} 类型的参数值
+     */
+    public static Integer getIntegerParameter(String name, Integer defaultValue) {
+        return convert.toInt(getParameter(name), defaultValue);
+    }
 
     /**
      * 获取 ServletRequestAttributes 对象

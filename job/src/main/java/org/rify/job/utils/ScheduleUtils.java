@@ -1,12 +1,12 @@
 package org.rify.job.utils;
 
-import org.rify.job.RifyJobExecution;
-import org.rify.job.domain.ScheduleContext;
 import org.quartz.*;
 import org.rify.common.constants.ScheduleKey;
 import org.rify.common.enums.ScheduleTaskExceptionCode;
 import org.rify.common.exception.job.RifyScheduleException;
 import org.rify.common.utils.StringUtils;
+import org.rify.job.RifyJobExecution;
+import org.rify.job.domain.Task;
 
 /**
  * @author : lucas
@@ -28,10 +28,10 @@ public class ScheduleUtils {
      * 创建任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param context   任务信息 {@link  ScheduleContext}
+     * @param context   任务信息 {@link  Task}
      * @throws SchedulerException 抛出一个 {@link SchedulerException} 类型的异常
      */
-    public static void create(Scheduler scheduler, ScheduleContext context) throws SchedulerException, RifyScheduleException {
+    public static void create(Scheduler scheduler, Task context) throws SchedulerException, RifyScheduleException {
         Long id = context.getId();
         String group = context.getGroup();
         JobKey jobKey = getJobKey(id, group);
@@ -62,7 +62,7 @@ public class ScheduleUtils {
      * 暂停任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param name      任务名称 {@link  ScheduleContext#getName()}
+     * @param name      任务名称 {@link  Task#getName()}
      */
     public static void pause(Scheduler scheduler, String name) {
     }
@@ -71,7 +71,7 @@ public class ScheduleUtils {
      * 恢复任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param name      任务名称 {@link  ScheduleContext#getName()}
+     * @param name      任务名称 {@link  Task#getName()}
      */
     public static void resume(Scheduler scheduler, String name) {
     }
@@ -80,7 +80,7 @@ public class ScheduleUtils {
      * 删除任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param name      任务名称 {@link  ScheduleContext#getName()}
+     * @param name      任务名称 {@link  Task#getName()}
      */
     public static void delete(Scheduler scheduler, String name) {
     }
@@ -89,7 +89,7 @@ public class ScheduleUtils {
      * 立即执行一次任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param name      任务名称 {@link  ScheduleContext#getName()}
+     * @param name      任务名称 {@link  Task#getName()}
      */
     public static void once(Scheduler scheduler, String name) {
     }
@@ -98,12 +98,12 @@ public class ScheduleUtils {
      * 修改任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param context   任务信息 {@link  ScheduleContext}
+     * @param context   任务信息 {@link  Task}
      */
-    public static void modify(Scheduler scheduler, ScheduleContext context) {
+    public static void modify(Scheduler scheduler, Task context) {
     }
 
-    public static CronScheduleBuilder withMisfireHandling(CronScheduleBuilder builder, ScheduleContext context) throws RifyScheduleException {
+    public static CronScheduleBuilder withMisfireHandling(CronScheduleBuilder builder, Task context) throws RifyScheduleException {
         try {
             return switch (ScheduleKey.MISFIRE.valueOf(context.getMisfirePolicy())) {
                 case ScheduleKey.MISFIRE.DEFAULT -> builder;

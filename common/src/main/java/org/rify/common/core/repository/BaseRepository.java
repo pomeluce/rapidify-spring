@@ -22,5 +22,5 @@ public interface BaseRepository<T, ID> extends JpaRepository<T, ID> {
 
     void entityDetach(T entity);
 
-    <K, H extends Comparable<H>> Optional<List<K>> fetchPage(BlazeJPAQuery<K> query, Pageable<H> pageable);
+    <K> Optional<List<K>> fetchPage(BlazeJPAQuery<K> query, Pageable pageable);
 }

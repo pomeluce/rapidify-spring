@@ -11,7 +11,7 @@ import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
-import org.rify.server.system.domain.enums.RifyUserStatus;
+import org.rify.server.system.domain.enums.UserStatus;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,7 +23,7 @@ import java.util.Objects;
  * @author : lucas
  * @version 1.0
  * @date : 2023/9/2 11:23
- * @className : RifyUser
+ * @className : User
  * @description : 用户实体类
  */
 @Builder
@@ -32,7 +32,7 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "rify_user")
-public class RifyUser implements Serializable {
+public class User implements Serializable {
     private static final @Serial long serialVersionUID = 1L;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class RifyUser implements Serializable {
     private String email;
     @Enumerated(EnumType.STRING)
     @JdbcType(value = PostgreSQLEnumJdbcType.class)
-    private RifyUserStatus status;
+    private UserStatus status;
     private String role;
     @Type(ListArrayType.class)
     @Column(name = "permissions", columnDefinition = "varchar array")
@@ -52,15 +52,15 @@ public class RifyUser implements Serializable {
     private String updateBy;
     private @UpdateTimestamp Timestamp updateTime;
 
-    public RifyUser() {
+    public User() {
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RifyUser rifyUser = (RifyUser) o;
-        return Objects.equals(id, rifyUser.id) && Objects.equals(account, rifyUser.account) && Objects.equals(password, rifyUser.password) && Objects.equals(email, rifyUser.email) && Objects.equals(status, rifyUser.status) && Objects.equals(role, rifyUser.role) && Objects.equals(permissions, rifyUser.permissions) && Objects.equals(createBy, rifyUser.createBy) && Objects.equals(createTime, rifyUser.createTime) && Objects.equals(updateBy, rifyUser.updateBy) && Objects.equals(updateTime, rifyUser.updateTime);
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(account, user.account) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(status, user.status) && Objects.equals(role, user.role) && Objects.equals(permissions, user.permissions) && Objects.equals(createBy, user.createBy) && Objects.equals(createTime, user.createTime) && Objects.equals(updateBy, user.updateBy) && Objects.equals(updateTime, user.updateTime);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class RifyUser implements Serializable {
 
     @Override
     public String toString() {
-        return "RifyUser{" +
+        return "User{" +
                 "id=" + id +
                 ", account='" + account + '\'' +
                 ", password='" + password + '\'' +

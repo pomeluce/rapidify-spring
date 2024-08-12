@@ -1,6 +1,6 @@
 package org.rify.job.controller;
 
-import org.rify.job.domain.ScheduleContext;
+import org.rify.job.domain.Task;
 import org.rify.common.annotation.RestApiController;
 import org.rify.common.core.controller.BaseController;
 import org.rify.common.core.domain.HttpEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestApiController("/schedule")
 public class ScheduleTaskController  extends BaseController {
 
-    public @PostMapping("/add") HttpEntity<String, Object> create(@RequestBody ScheduleContext context) {
+    public @PostMapping("/add") HttpEntity<String, Object> create(@RequestBody Task context) {
         HttpEntity<String, Object> result = HttpEntity.instance(HttpStatus.OK.value());
         // 判断 cron 表达式是否有效
         if (CronUtils.isValidExpression(context.getCronExpression())) {

@@ -1,12 +1,14 @@
 package org.rify.common.text;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.rify.common.utils.ObjectUtils;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author : lucas
@@ -117,6 +119,38 @@ public final class TextConvert implements Serializable {
     }
 
     /**
+     * 将给定值转换成 Integer 对象
+     * <br>
+     * <p>如果值为 <code>null</code> 或转换失败, 则返回默认值</p>
+     * <br>
+     *
+     * @param value        待转化的 object 对象 {@link Object}
+     * @param defaultValue 默认值 {@link Integer}
+     * @return 返回一个 {@link Integer} 类型的转换结果
+     */
+    public Integer toInt(Object value, Integer defaultValue) {
+        return switch (value) {
+            case null -> defaultValue;
+            case Integer integer -> integer;
+            case Number number -> number.intValue();
+            default -> Optional.ofNullable(toString(value, null)).map(String::trim).map(Integer::parseInt).orElse(defaultValue);
+        };
+    }
+
+    /**
+     * 将给定值转换成 Integer 对象
+     * <br>
+     * <p>如果值为 <code>null</code> 或转换失败, 则返回 <code>null</code></p>
+     * <br>
+     *
+     * @param value 待转化的 object 对象 {@link Object}
+     * @return 返回一个 {@link Integer} 类型的转换结果
+     */
+    public Integer toInt(Object value) {
+        return toInt(value, null);
+    }
+
+    /**
      * 字符串转换
      * <br>
      * <p>将 object 对象按照默认字符集转换成 string 字符串</p>
@@ -127,5 +161,19 @@ public final class TextConvert implements Serializable {
      */
     public String toString(Object text) {
         return string(text, DEFAULT_CHARSET);
+    }
+
+    /**
+     * 字符串转换
+     * <br>
+     * <p>如果对象不为 null, 则将 object 对象按照默认字符集转换成 string 字符串; 否则返回默认值</p>
+     * <br>
+     *
+     * @param text         待转换的 object 对象 {@link Object}
+     * @param defaultValue 默认值 {@link  String}
+     * @return 返回一个 {@link String} 类型的转换结果
+     */
+    public String toString(Object text, String defaultValue) {
+        return ObjectUtils.isEmpty(text) ? defaultValue : toString(text);
     }
 }

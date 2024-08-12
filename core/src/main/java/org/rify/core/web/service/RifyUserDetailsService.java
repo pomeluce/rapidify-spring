@@ -11,9 +11,9 @@ import org.rify.common.utils.ObjectUtils;
 import org.rify.common.utils.spring.SecurityUtils;
 import org.rify.common.utils.spring.SpringMessage;
 import org.rify.core.security.context.AuthenticationContextHolder;
-import org.rify.server.system.domain.entity.RifyUser;
+import org.rify.server.system.domain.entity.User;
 import org.rify.server.system.domain.model.LoginUser;
-import org.rify.server.system.repository.RifyUserRepository;
+import org.rify.server.system.repository.SystemUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -36,12 +36,12 @@ public class RifyUserDetailsService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(RifyUserDetailsService.class);
 
     private @Resource RifyProperty property;
-    private @Resource RifyUserRepository repository;
+    private @Resource SystemUserRepository repository;
     private @Resource RedisClient redisClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        RifyUser user = repository.findByAccount(username).orElseThrow(() -> {
+        User user = repository.findUserByAccount(username).orElseThrow(() -> {
             log.error("当前登录用户:{} 不存在", username);
             return new RifyServiceException(SpringMessage.message("login.user.not.exists", username));
         });
@@ -73,9 +73,9 @@ public class RifyUserDetailsService implements UserDetailsService {
      * 2. 校验登录密码
      * 3. 校验登录次数
      *
-     * @param user 登录用户 {@link RifyUser}
+     * @param user 登录用户 {@link User}
      */
-    private void isLock(RifyUser user) {
+    private void isLock(User user) {
         Authentication context = AuthenticationContextHolder.getContext();
         String account = context.getName();
         Integer maxRetries = property.getUser().getMaxRetries();

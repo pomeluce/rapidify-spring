@@ -1,7 +1,7 @@
 package org.rify;
 
 import org.junit.jupiter.api.Test;
-import org.rify.server.system.domain.entity.RifyUser;
+import org.rify.server.system.domain.entity.User;
 import org.rify.common.utils.ObjectUtils;
 
 import java.io.Serializable;
@@ -34,10 +34,10 @@ public class ObjectUtilsTest {
     }
 
     public @Test void deepCloneTest() {
-        RifyUser user1 = new RifyUser();
+        User user1 = new User();
         user1.setAccount("2222222");
 
-        RifyUser user2 = ObjectUtils.deepClone(user1);
+        User user2 = ObjectUtils.deepClone(user1);
         user2.setAccount("33333333");
 
         System.out.println(user1);

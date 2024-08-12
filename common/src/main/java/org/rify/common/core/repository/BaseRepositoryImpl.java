@@ -38,7 +38,7 @@ public abstract class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, I
     }
 
     @Override
-    public <K, H extends Comparable<H>> Optional<List<K>> fetchPage(BlazeJPAQuery<K> query, Pageable<H> pageable) {
+    public <K> Optional<List<K>> fetchPage(BlazeJPAQuery<K> query, Pageable pageable) {
         return Optional.ofNullable(pageable).map(page -> {
             page.getDslOrderBy().map(query::orderBy);
             page.getDefaultOrder().map(query::orderBy);

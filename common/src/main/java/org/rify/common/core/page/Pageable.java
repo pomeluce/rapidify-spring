@@ -4,6 +4,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringPath;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.rify.common.utils.StringUtils;
@@ -20,29 +21,34 @@ import java.util.Optional;
  * @className : Pageable
  * @description : 分页对象
  */
-// @Builder
+@Builder
 @Getter
 @Setter
-public class Pageable<T extends Comparable<T>> implements Serializable {
+public class Pageable implements Serializable {
     private static final @Serial long serialVersionUID = 1L;
     /* 当前页 */
     private Integer pageNumber;
     /* 叶容量 */
     private Integer pageSize;
     /* 排序方式 */
-    private Sort.Direction sort = Sort.Direction.ASC;
+    private Sort.Direction sort;
     /* 排序列 */
     private String orderByColumn;
     @Getter(value = AccessLevel.NONE)
     @Setter(value = AccessLevel.NONE)
-    private OrderSpecifier<T> orderSpecifier;
+    private OrderSpecifier<? extends Comparable<?>> orderSpecifier;
 
-    public Optional<OrderSpecifier<T>> getDefaultOrder() {
-        return Optional.ofNullable(this.orderSpecifier);
+    public Pageable() {
+        this.sort = Sort.Direction.ASC;
     }
 
-    public void setDefaultOrder(OrderSpecifier<T> orderSpecifier) {
+    public @SuppressWarnings("unchecked") <T extends Comparable<T>> Optional<OrderSpecifier<T>> getDefaultOrder() {
+        return Optional.ofNullable((OrderSpecifier<T>) this.orderSpecifier);
+    }
+
+    public <T extends Comparable<T>> Pageable setDefaultOrder(OrderSpecifier<T> orderSpecifier) {
         this.orderSpecifier = orderSpecifier;
+        return this;
     }
 
     /**

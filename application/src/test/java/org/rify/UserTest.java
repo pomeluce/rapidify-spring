@@ -3,16 +3,12 @@ package org.rify;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.rify.common.utils.spring.SecurityUtils;
-import org.rify.server.system.domain.entity.QRifyUser;
-import org.rify.server.system.domain.entity.RifyUser;
-import org.rify.server.system.domain.enums.RifyUserStatus;
-import org.rify.server.system.repository.RifyUserRepository;
+import org.rify.server.system.domain.entity.User;
+import org.rify.server.system.domain.enums.UserStatus;
+import org.rify.server.system.repository.SystemUserRepository;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author : lucas
@@ -22,16 +18,16 @@ import java.util.Optional;
  * @description : RifyUser 测试类
  */
 @SpringBootTest
-public class RifyUserTest {
+public class UserTest {
 
-    private @Resource RifyUserRepository repository;
+    private @Resource SystemUserRepository repository;
 
     public @Test void save() {
         String[] names = {"zhangsan", "lisi", "wangwu", "jack", "alan", "amy", "xiaoming", "liyang"};
         for (String name : names) {
-            RifyUser user = RifyUser.builder()
+            User user = User.builder()
                     .account(name).password(SecurityUtils.encoderPassword(name + "pass"))
-                    .email(name + "@gmail.com").status(RifyUserStatus.ENABLED)
+                    .email(name + "@gmail.com").status(UserStatus.ENABLED)
                     .role("everyone").permissions(List.of("user"))
                     .createBy(name).updateBy(name)
                     .build();
@@ -41,15 +37,14 @@ public class RifyUserTest {
 
     @Test
     void findRifyUserByAccountTest() {
-        System.out.println(repository.findByAccount("zhangsan").orElseThrow());
+        System.out.println(repository.findUserByAccount("zhangsan").orElseThrow());
     }
 
     public @Test void findByPage() {
-        QRifyUser user = QRifyUser.rifyUser;
-        PageRequest page = PageRequest.of(2, 2, Sort.by(Sort.Direction.ASC, "id").ascending());
-
-        Optional<List<RifyUser>> list = repository.findByStatus(RifyUserStatus.ENABLED);
-        System.out.println(list);
+        // Optional<List<User>> list = repository.findUserList();
+        // System.out.println(list);
+        //
+        // System.out.println(Pageable.builder().build().getSort());
 
         // List<RifyUser> list = factory.selectFrom(user)
         //         .where(user.status.eq(RifyUserStatus.ENABLED))

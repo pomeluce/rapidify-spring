@@ -3,8 +3,8 @@ package org.rify.server.system.domain.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
-import org.rify.server.system.domain.entity.RifyUser;
-import org.rify.server.system.domain.enums.RifyUserStatus;
+import org.rify.server.system.domain.entity.User;
+import org.rify.server.system.domain.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -37,7 +37,7 @@ public class LoginUser implements UserDetails {
     // 登录操作系统
     private String os;
     // 用户信息
-    private RifyUser user;
+    private User user;
     // 过期时间
     private Long expireTime;
     // 刷新时间
@@ -74,18 +74,18 @@ public class LoginUser implements UserDetails {
 
     /* 账号是否可用 */
     public @Override boolean isEnabled() {
-        return RifyUserStatus.ENABLED.equals(user.getStatus());
+        return UserStatus.ENABLED.equals(user.getStatus());
     }
 
     public LoginUser() {
     }
 
-    public LoginUser(RifyUser user, List<String> permissions) {
+    public LoginUser(User user, List<String> permissions) {
         this.user = user;
         this.permissions = permissions;
     }
 
-    public LoginUser(RifyUser user) {
+    public LoginUser(User user) {
         this.user = user;
     }
 

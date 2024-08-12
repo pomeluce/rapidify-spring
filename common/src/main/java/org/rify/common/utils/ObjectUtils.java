@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @className : ObjectUtils
  * @description : 对象工具类
  */
-public final class ObjectUtils {
+public final class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
     /**
      * 拷贝方法
      *
