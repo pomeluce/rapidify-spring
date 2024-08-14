@@ -10,6 +10,8 @@ import org.rify.common.utils.ObjectUtils;
 import org.rify.common.utils.StringUtils;
 
 import java.util.Date;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * @author : lucas
@@ -79,6 +81,16 @@ public class SelectBooleanBuilder {
         return this;
     }
 
+    public <T extends Date & Comparable<Date>> SelectBooleanBuilder notEmptyEq(T param, DatePath<T> path) {
+        if (ObjectUtils.isNotEmpty(param)) builder.and(path.eq(param));
+        return this;
+    }
+
+    public <T extends Date & Comparable<Date>> SelectBooleanBuilder notEmptyEq(T param, DateTimePath<T> path) {
+        if (ObjectUtils.isNotEmpty(param)) builder.and(path.eq(param));
+        return this;
+    }
+
     public SelectBooleanBuilder notEmptyIn(String[] params, StringPath path) {
         if (ArrayUtils.isNotEmpty(params)) builder.and(path.in(params));
         return this;
@@ -136,6 +148,16 @@ public class SelectBooleanBuilder {
 
     public <T extends Date & Comparable<Date>> SelectBooleanBuilder notEmptyDateTimeAfter(T param, DateTimePath<T> path) {
         if (ObjectUtils.isNotEmpty(param)) builder.and(path.loe(param));
+        return this;
+    }
+
+    public SelectBooleanBuilder with(Consumer<SelectBooleanBuilder> consumer) {
+        if (ObjectUtils.isNotEmpty(consumer)) consumer.accept(this);
+        return this;
+    }
+
+    public SelectBooleanBuilder custom(Supplier<Predicate> supplier) {
+        builder.and(supplier.get());
         return this;
     }
 }

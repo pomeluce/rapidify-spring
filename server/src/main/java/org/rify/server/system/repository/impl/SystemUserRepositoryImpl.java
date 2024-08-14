@@ -2,7 +2,6 @@ package org.rify.server.system.repository.impl;
 
 import com.blazebit.persistence.querydsl.BlazeJPAQuery;
 import com.blazebit.persistence.querydsl.BlazeJPAQueryFactory;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import jakarta.persistence.EntityManager;
 import org.rify.common.core.page.Pageable;
 import org.rify.common.core.repository.BaseRepositoryImpl;
@@ -44,13 +43,12 @@ public class SystemUserRepositoryImpl extends BaseRepositoryImpl<User, Long> imp
     public @Transactional(readOnly = true) Optional<List<User>> findUserList(User user, Pageable pageable) {
         BlazeJPAQuery<User> query = factory.selectFrom(this.user).where(SelectBooleanBuilder.builder()
                 .notEmptyEq(user.getId(), this.user.id)
-                .notEmptyEq(user.getAccount(), this.user.account)
-                .notEmptyEq(user.getEmail(), this.user.email)
+                .notEmptyLike(user.getAccount(), this.user.account)
+                .notEmptyLike(user.getEmail(), this.user.email)
                 .notEmptyEq(user.getStatus(), this.user.status)
                 .notEmptyEq(user.getRole(), this.user.role)
-                .notEmptyExpressionAnyOf(user.getPermissions().stream().map(this.user.permissions::contains).toArray(BooleanExpression[]::new))
-                .notEmptyEq(user.getCreateBy(), this.user.createBy)
-                .notEmptyEq(user.getUpdateBy(), this.user.updateBy)
+                .notEmptyLike(user.getCreateBy(), this.user.createBy)
+                .notEmptyLike(user.getUpdateBy(), this.user.updateBy)
                 .build()
         );
         return this.fetchPage(query, pageable);
@@ -64,7 +62,6 @@ public class SystemUserRepositoryImpl extends BaseRepositoryImpl<User, Long> imp
      */
     @Override
     public @Transactional(readOnly = true) Optional<User> findUserByAccount(String account) {
-        return Optional.ofNullable(factory.selectFrom(this.user).where(this.user.account.eq(account)).fetchOne()
-        );
+        return Optional.ofNullable(factory.selectFrom(this.user).where(this.user.account.eq(account)).fetchOne());
     }
 }

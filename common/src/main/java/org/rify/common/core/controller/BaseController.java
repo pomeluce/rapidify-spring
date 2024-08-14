@@ -16,6 +16,14 @@ public class BaseController {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    protected <R> HttpEntity<R, Object> success(String message) {
+        return success(message, null);
+    }
+
+    protected <R> HttpEntity<R, Object> success(String message, R data) {
+        return HttpEntity.instance(HttpStatus.OK.value(), message, data);
+    }
+
     protected <R> HttpEntity<R, Object> error(String message) {
         return error(message, null);
     }

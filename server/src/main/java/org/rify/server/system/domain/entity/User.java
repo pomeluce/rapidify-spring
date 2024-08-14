@@ -1,22 +1,16 @@
 package org.rify.server.system.domain.entity;
 
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcType;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.dialect.PostgreSQLEnumJdbcType;
+import org.rify.common.core.domain.BaseEntity;
 import org.rify.server.system.domain.enums.UserStatus;
 
 import java.io.Serial;
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,13 +20,13 @@ import java.util.Objects;
  * @className : User
  * @description : 用户实体类
  */
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "rify_user")
-public class User implements Serializable {
+public class User extends BaseEntity {
     private static final @Serial long serialVersionUID = 1L;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,13 +38,6 @@ public class User implements Serializable {
     @JdbcType(value = PostgreSQLEnumJdbcType.class)
     private UserStatus status;
     private String role;
-    @Type(ListArrayType.class)
-    @Column(name = "permissions", columnDefinition = "varchar array")
-    private List<String> permissions;
-    private String createBy;
-    private @CreationTimestamp Timestamp createTime;
-    private String updateBy;
-    private @UpdateTimestamp Timestamp updateTime;
 
     public User() {
     }
@@ -60,12 +47,12 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(account, user.account) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(status, user.status) && Objects.equals(role, user.role) && Objects.equals(permissions, user.permissions) && Objects.equals(createBy, user.createBy) && Objects.equals(createTime, user.createTime) && Objects.equals(updateBy, user.updateBy) && Objects.equals(updateTime, user.updateTime);
+        return Objects.equals(id, user.id) && Objects.equals(account, user.account) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && status == user.status && Objects.equals(role, user.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, account, password, email, status, role, permissions, createBy, createTime, updateBy, updateTime);
+        return Objects.hash(id, account, password, email, status, role);
     }
 
     @Override
@@ -77,11 +64,6 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", status=" + status +
                 ", role='" + role + '\'' +
-                ", permissions=" + permissions +
-                ", createBy='" + createBy + '\'' +
-                ", createTime=" + createTime +
-                ", updateBy='" + updateBy + '\'' +
-                ", updateTime=" + updateTime +
-                '}';
+                "} " + super.toString();
     }
 }

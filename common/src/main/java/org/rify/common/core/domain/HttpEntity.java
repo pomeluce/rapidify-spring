@@ -1,6 +1,8 @@
 package org.rify.common.core.domain;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -15,6 +17,8 @@ import java.util.Objects;
  * @description : http 请求返回实体
  */
 @Schema(description = "http 请求相应实体")
+@Getter
+@Setter
 public class HttpEntity<R, T> implements Serializable {
     /* 请求结果状态码 */
     private @Schema(description = "状态码") int code;
@@ -186,38 +190,6 @@ public class HttpEntity<R, T> implements Serializable {
         this.code = code;
         this.message = message;
         this.data = data;
-        this.body = body;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public R getData() {
-        return data;
-    }
-
-    public void setData(R data) {
-        this.data = data;
-    }
-
-    public Map<String, T> getBody() {
-        return body;
-    }
-
-    public void setBody(Map<String, T> body) {
         this.body = body;
     }
 

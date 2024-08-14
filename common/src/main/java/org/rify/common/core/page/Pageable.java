@@ -49,9 +49,6 @@ public class Pageable implements Serializable {
         return this;
     }
 
-    /**
-     * 偏移量
-     */
     public int offset() {
         return (this.pageNumber - 1) * pageSize;
     }
