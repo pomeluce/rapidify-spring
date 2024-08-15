@@ -25,7 +25,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <java.version>21</java.version>
-        <spring.version>3.3.2</spring.version>
+        <spring-boot.version>3.3.2</spring-boot.version>
         <querydsl.version>5.1.0</querydsl.version>
         <blaze-persistence.version>1.6.12</blaze-persistence.version>
         <hypersistence.version>3.8.2</hypersistence.version>
@@ -44,7 +44,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.version}</version>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
