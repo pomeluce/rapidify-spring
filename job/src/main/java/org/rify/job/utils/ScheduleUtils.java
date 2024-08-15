@@ -2,11 +2,12 @@ package org.rify.job.utils;
 
 import org.quartz.*;
 import org.rify.common.constants.ScheduleKey;
-import org.rify.common.enums.ScheduleTaskExceptionCode;
+import org.rify.common.enums.ScheduleExceptionCode;
 import org.rify.common.exception.job.RifyScheduleException;
 import org.rify.common.utils.StringUtils;
 import org.rify.job.RifyJobExecution;
-import org.rify.job.domain.Task;
+import org.rify.job.domain.entity.Task;
+import org.rify.job.domain.enums.TaskStatus;
 
 /**
  * @author : lucas
@@ -33,7 +34,7 @@ public class ScheduleUtils {
      */
     public static void create(Scheduler scheduler, Task context) throws SchedulerException, RifyScheduleException {
         Long id = context.getId();
-        String group = context.getGroup();
+        String group = context.getGroupId();
         JobKey jobKey = getJobKey(id, group);
 
         // 任务详情
@@ -55,34 +56,40 @@ public class ScheduleUtils {
         scheduler.scheduleJob(detail, trigger);
 
         // 判断是否暂停任务
-        if (context.getStatus().equals(ScheduleKey.STATUS.PAUSE.value())) scheduler.pauseJob(jobKey);
+        if (context.getStatus().equals(TaskStatus.PAUSE)) scheduler.pauseJob(jobKey);
     }
 
     /**
      * 暂停任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param name      任务名称 {@link  Task#getName()}
+     * @param context   任务信息 {@link  Task}
      */
-    public static void pause(Scheduler scheduler, String name) {
+    public static void pause(Scheduler scheduler, Task context) throws SchedulerException {
+        JobKey key = getJobKey(context.getId(), context.getGroupId());
+        scheduler.pauseJob(key);
     }
 
     /**
      * 恢复任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param name      任务名称 {@link  Task#getName()}
+     * @param context   任务信息 {@link  Task}
      */
-    public static void resume(Scheduler scheduler, String name) {
+    public static void resume(Scheduler scheduler, Task context) throws SchedulerException {
+        JobKey key = getJobKey(context.getId(), context.getGroupId());
+        scheduler.resumeJob(key);
     }
 
     /**
      * 删除任务
      *
      * @param scheduler 调度器 {@link  Scheduler}
-     * @param name      任务名称 {@link  Task#getName()}
+     * @param context   任务信息 {@link  Task}
      */
-    public static void delete(Scheduler scheduler, String name) {
+    public static void delete(Scheduler scheduler, Task context) throws SchedulerException {
+        JobKey key = getJobKey(context.getId(), context.getGroupId());
+        scheduler.deleteJob(key);
     }
 
     /**
@@ -105,14 +112,14 @@ public class ScheduleUtils {
 
     public static CronScheduleBuilder withMisfireHandling(CronScheduleBuilder builder, Task context) throws RifyScheduleException {
         try {
-            return switch (ScheduleKey.MISFIRE.valueOf(context.getMisfirePolicy())) {
-                case ScheduleKey.MISFIRE.DEFAULT -> builder;
-                case ScheduleKey.MISFIRE.IGNORE_MISFIRES -> builder.withMisfireHandlingInstructionIgnoreMisfires();
-                case ScheduleKey.MISFIRE.FIRE_AND_PROCEED -> builder.withMisfireHandlingInstructionFireAndProceed();
-                case ScheduleKey.MISFIRE.DO_NOTHING -> builder.withMisfireHandlingInstructionDoNothing();
+            return switch (context.getMisfirePolicy()) {
+                case DEFAULT -> builder;
+                case IGNORE_MISFIRES -> builder.withMisfireHandlingInstructionIgnoreMisfires();
+                case FIRE_AND_PROCEED -> builder.withMisfireHandlingInstructionFireAndProceed();
+                case DO_NOTHING -> builder.withMisfireHandlingInstructionDoNothing();
             };
         } catch (IllegalArgumentException e) {
-            throw new RifyScheduleException(StringUtils.format("the schedule misfire policy '{}' cannot be used in cron schedule build", context.getMisfirePolicy()), ScheduleTaskExceptionCode.MISFIRE_ERROR, e);
+            throw new RifyScheduleException(StringUtils.format("the schedule misfire policy '{}' cannot be used in cron schedule build", context.getMisfirePolicy()), ScheduleExceptionCode.MISFIRE_ERROR, e);
         }
     }
 }

@@ -34,9 +34,8 @@ public class User extends BaseEntity {
     private @Column(unique = true) String account;
     private String password;
     private String email;
-    @Enumerated(EnumType.STRING)
     @JdbcType(value = PostgreSQLEnumJdbcType.class)
-    private UserStatus status;
+    private @Enumerated(EnumType.STRING) UserStatus status;
     private String role;
 
     public User() {

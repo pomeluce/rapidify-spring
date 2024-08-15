@@ -1,5 +1,5 @@
 drop table if exists rify_user;
-drop type rify_user_status;
+drop type if exists rify_user_status;
 
 create type rify_user_status as enum ('ENABLED', 'DISABLED', 'DELETE');
 create table rify_user

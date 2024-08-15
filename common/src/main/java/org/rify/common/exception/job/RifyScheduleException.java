@@ -1,6 +1,6 @@
 package org.rify.common.exception.job;
 
-import org.rify.common.enums.ScheduleTaskExceptionCode;
+import org.rify.common.enums.ScheduleExceptionCode;
 
 /**
  * @author : lucas
@@ -10,19 +10,19 @@ import org.rify.common.enums.ScheduleTaskExceptionCode;
  * @description : 定时任务异常
  */
 public class RifyScheduleException extends Exception {
-    private final ScheduleTaskExceptionCode key;
+    private final ScheduleExceptionCode key;
 
-    public RifyScheduleException(String message, ScheduleTaskExceptionCode key) {
+    public RifyScheduleException(String message, ScheduleExceptionCode key) {
         super(message);
         this.key = key;
     }
 
-    public RifyScheduleException(String message, ScheduleTaskExceptionCode key, Exception exception) {
+    public RifyScheduleException(String message, ScheduleExceptionCode key, Exception exception) {
         super(message, exception);
         this.key = key;
     }
 
-    public ScheduleTaskExceptionCode getKey() {
+    public ScheduleExceptionCode getKey() {
         return key;
     }
 }
